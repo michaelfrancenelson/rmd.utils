@@ -1,0 +1,93 @@
+---
+title: "Ricker params"
+output:  
+  html_document:
+    theme: readable
+    css: !expr here::here("formatting", "css", "styles.css")
+    toc: TRUE
+    toc_float: TRUE
+---
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+# exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+# source(here::here("rmd_tools", "find_file.R"))
+
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+Question
+========
+
+```{r CSS, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. To gain visual intuition, try using `curve()` to plot the Ricker function.
+  - Try out different values of the two parameters as well as plotting over different ranges of x-values.
+  - Try plotting two or more curves with slightly different parameter values on the same plot
+  - You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+  - Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+```{r echo=FALSE}
+curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
+curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
+curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
+curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
+# curve(ricker_fun(x, 1.75, 0.003), add = TRUE, from = 0, to = 100, col = 66, lwd = 3, lty = 4)
+
+```
+
+
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Qualitatively describe how the `a` parameter influences the curve shape.
+- Q2 (2 pts.) Qualitatively describe how the `b` parameter influences the curve shape.
+
+</div>
+
+<div class="hintborder"> NOTE: make sure you choose an appropriate range of x-values in your plot.</div>
+
+
+
+Solution
+========
+
+```{r}
+curve(ricker_fun(x, 25, 0.1), add = FALSE, from = 0, to = 50, ylab = "f(x)")
+curve(ricker_fun(x, 20, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 10, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 75, 0.3), add = TRUE, col = 2, lty = 1)
+curve(ricker_fun(x, 50, 0.3), add = TRUE, col = 2, lty = 2)
+curve(ricker_fun(x, 40, 0.3), add = TRUE, col = 2, lty = 2)
+
+```
+
+
+
+
+
+Meta-information
+================
+extitle: Ricker params
+extype: string
+exsolution: nil
+exname: lab 5
+exsection: lab 5
+exextra[essay,logical]: TRUE
+exextra[essay_format,character]: noinline
+exextra[essay_required,logical]: FALSE
+exextra[essay_fieldlines,numeric]: 5
+exextra[essay_attachments,numeric]: 1
+exextra[essay_attachmentsrequired,logical]: TRUE
+expoints: 4
