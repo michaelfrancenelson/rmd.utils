@@ -28,7 +28,7 @@ add_moodle_quiz_questions = function(
   }
 
   question_source_files =
-    question_source_files[grepl(".html", question_source_files)]
+    question_source_files[!grepl(".html", question_source_files)]
 
 
   question_file_lines = format_moodle_web_questions(question_source_files)
