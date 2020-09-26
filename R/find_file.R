@@ -13,6 +13,7 @@
 #' @param error_if_none Throw an error if no matches are found?  If FALSE, the function returns a NULL value.
 #'
 #' @return The absolute path to the file, if it was found.
+#' @export
 
 find_file = function(
   filename,

@@ -5,6 +5,7 @@
 #' @param input_lines lines in-between which to insert newline characters
 #' @param lb new line character to insert
 #'
+#' @export
 
 
 insert_line_breaks = function(input_lines, lb = "\n")

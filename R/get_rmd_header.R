@@ -2,6 +2,8 @@
 #'
 #' @param filename the name of the Rmd file to read
 #' @param file_lines a character vector containing the lines of a source Rmd file.
+#'
+#' @export
 
 get_rmd_header = function(filename, file_lines = NULL)
 {

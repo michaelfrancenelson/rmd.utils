@@ -6,8 +6,12 @@
 #' @param rmd_source_lines A character vector with the lines of the .Rmd source file.
 #' @param section_name Name of section, e.g. "Question", "Solution", "Meta-information"
 #' @param section_delimiter The section break delimiter to search for
+#'
+#' @export
+#'
 # @param invert_section
 # @param ignore_error
+
 
 get_moodle_question_section_line_indices = function(
   rmd_source_lines,

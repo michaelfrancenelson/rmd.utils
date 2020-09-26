@@ -9,6 +9,7 @@
 #' @param include_metadata boolean: whether or not to include the 'Meta-information' section of the source files.
 #' @param insert_line_breaks_in_metadata
 #'
+#' @export
 
 
 format_moodle_question_source = function(

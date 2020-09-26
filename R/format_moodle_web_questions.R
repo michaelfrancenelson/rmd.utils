@@ -8,6 +8,7 @@
 #' @param include_metadata boolean: whether or not to include the 'Meta-information' section of the source files.
 #'
 #' @return source code lines
+#' @export
 #'
 
 

@@ -1,7 +1,6 @@
-
 #' 
 #' 
-#' 
+#' @export
 
 add_moodle_quiz_questions = function(
   quiz_source_filenames,
@@ -44,49 +43,7 @@ add_moodle_quiz_questions = function(
     cat(sprintf(child_chunk_fmt, tmp_files[i]))
     cat(sprintf(tmp_rm_chunk_fmt, tmp_files[i]))
   }
-
   
-  
-  }
-# ---- testing arguments ----  
-if(FALSE)
-{
-  assignment_filename = "week_03_data_exploration_deterministic_functions.Rmd"
-  assignment_filename = "week_03_data_exploration_deterministic_functions.Rmd"
-  out_filename = NULL
-  search_path = here::here("assignments", "eco_602")
-  moodle_source_subdir = "moodle"
-  dir_out = here::here("docs")
-  write_html = FALSE
-  include_header = TRUE
-  rmd_tools_dir = "rmd_tools"  
-  question_number_fmt = "## Question %1$s: %2$s"
-  
-  assignment_name = NULL
-  assignment_name = "Data Exploration and Determinsitic Functions"
-  build_answer_key = TRUE
-  
-  assignment_filename = "lab_04_uncertainty_and_error.Rmd"
-  search_path = here::here("assignments", "eco_634")
-  include_header = FALSE
-  write_html = FALSE
-  cat_results = FALSE
-  write_tmp = TRUE
-  tmp_filename = NA
-  build_answer_key = TRUE
-  include_metadata = TRUE
-  build_answer_key = FALSE
-  include_metadata = FALSE
-  
-  
-  
-  
-  rmd_tools_dir = "rmd_tools"  
-  
-  
-  # include_header = FALSE
-  if (FALSE)
-    build_moodle_web_questions(
-      assignment_filename = assignment_filename,
-      search_path = search_path, write_html = FALSE)
 }
+
+

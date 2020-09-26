@@ -6,8 +6,7 @@
 #'
 #'
 #'
-#'
-#'
+#' @export
 
 substitute_rmd_header_attr = function(
   header_lines,
