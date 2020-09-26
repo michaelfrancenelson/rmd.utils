@@ -15,9 +15,10 @@ editor_options:
 
 ```{r setup, include=FALSE}
 require(here)
+require(rmd.utils)
 knitr::opts_chunk$set(echo = TRUE)
 
-
+find_file("mcGarigal_ric")
 exp_fun = function(x, a, b) { return(a * exp(-b * x))}
 ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
 
@@ -288,7 +289,7 @@ Your assignment is to examine the data set provided (dispersal.csv) and find at 
 ```{r results='asis', echo=FALSE}
 
   question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
-    add_moodle_quiz_questions(question_source_files[1])
+    add_moodle_quiz_questions(question_source_files)
 ```
 
 

@@ -3,7 +3,7 @@
 #' @export
 
 add_moodle_quiz_questions = function(
-  quiz_source_filenames,
+  question_source_files,
   tmp_dir = here::here(),
   tmp_prefix = NULL,
   include_solution = FALSE,
@@ -16,11 +16,7 @@ add_moodle_quiz_questions = function(
     include_solution = FALSE
     include_metadata = FALSE
     tmp_prefix = NULL
-
-    question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
-
-    add_moodle_quiz_questions(question_source_files[1])
-
+    add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
   }
 
   if (is.null(tmp_prefix))
@@ -31,9 +27,11 @@ add_moodle_quiz_questions = function(
     tmp_fmt = file.path(tmp_dir, paste0(tmp_prefix, "_q_%0.2d.Rmd"))
   }
 
+  question_source_files =
+    question_source_files[grepl(".html", question_source_files)]
+
+
   question_file_lines = format_moodle_web_questions(question_source_files)
-
-
 
   n_q = length(question_file_lines)
   tmp_files = sprintf(tmp_fmt, 1:n_q)
