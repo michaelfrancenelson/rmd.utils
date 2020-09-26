@@ -8,8 +8,7 @@ format_moodle_question_source(
   lines_i,
   include_question = TRUE,
   include_solution = FALSE,
-  include_metadata = FALSE,
-  insert_line_breaks_in_metadata = TRUE
+  include_metadata = FALSE
 )
 }
 \arguments{
