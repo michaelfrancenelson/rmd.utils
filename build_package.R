@@ -33,6 +33,7 @@ if (FALSE)
   format_moodle_web_questions(find_file("Q01", extension = ".Rmd"))
 
     question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
-  format_moodle_web_questions(question_source_files)
+  question_file_format_moodle_web_questions(question_source_files)
+
 
 }

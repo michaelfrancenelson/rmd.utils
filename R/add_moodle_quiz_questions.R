@@ -31,7 +31,9 @@ add_moodle_quiz_questions = function(
     tmp_fmt = file.path(tmp_dir, paste0(tmp_prefix, "_q_%0.2d.Rmd"))
   }
 
-  question_source_files = format_moodle_web_questions(question_source_files)
+  question_file_lines = format_moodle_web_questions(question_source_files)
+
+
 
   n_q = length(question_file_lines)
   tmp_files = sprintf(tmp_fmt, 1:n_q)
