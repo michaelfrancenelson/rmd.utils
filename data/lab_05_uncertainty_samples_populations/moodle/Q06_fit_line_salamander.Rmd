@@ -10,9 +10,10 @@ output:
 
 
 ```{r, echo = FALSE, results = "hide", message=FALSE} 
-# source(here::here("formatting", "functions", "rmd_functions.R"))
-source(here::here("rmd_tools", "find_file.R"))
+
+require(rmd.utils)
 dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
 # Calculates the value of x for a linear function, given the coordinates
 # of a known point (x1, y1) and the slope of the line.
 line_point_slope = function(x, x1, y1, slope)

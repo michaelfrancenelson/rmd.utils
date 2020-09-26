@@ -18,7 +18,6 @@ require(here)
 require(rmd.utils)
 knitr::opts_chunk$set(echo = TRUE)
 
-find_file("mcGarigal_ric")
 exp_fun = function(x, a, b) { return(a * exp(-b * x))}
 ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
 
@@ -121,7 +120,7 @@ curve(
   ylab = "f(x)", xlab = "x")
 ```
 
-- What code could you use to create a simiar plot?
+- What code could you use to create a similar plot?
 
 
 
@@ -283,24 +282,17 @@ Your assignment is to examine the data set provided (dispersal.csv) and find at 
 
 
 
-
 # Lab Questions
 
-```{r results='asis', echo=FALSE}
+```{r results='hide', echo=FALSE}
+question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
+tmp = add_moodle_quiz_questions(question_source_files, include_solution = TRUE, include_metadata = TRUE)
+```
 
-  question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
-    add_moodle_quiz_questions(question_source_files)
+```{r child=tmp, echo=FALSE, include=FALSE}
+```
+```{r echo=FALSE, results = 'hide'}
+file.remove(tmp)
 ```
 
 
-
-```{r results = 'hide', echo = FALSE, include=FALSE, eval = FALSE}
-tmp = build_moodle_web_questions(
-  # assignment_filename = "lab_05_data_exploration_deterministic_functions.Rmd",
-  assignment_filename = "lab_05",
-  search_path = here::here("assignments", "eco_634"),
-  include_header = FALSE,
-  write_html = FALSE,
-  cat_results = FALSE,
-  write_tmp = TRUE)
-```

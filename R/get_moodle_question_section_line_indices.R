@@ -24,6 +24,7 @@ get_moodle_question_section_line_indices = function(
   if (FALSE)
   {
     rmd_source_lines = readLines(find_file("Q01", extension = ".Rmd"))
+    rmd_source_lines = file_lines
     section_name = "Meta-information"
     section_name = "Question"
     section_delimiter = "====="
@@ -34,7 +35,6 @@ get_moodle_question_section_line_indices = function(
 
   stopifnot(length(name_match) > 0)
   stopifnot(length(delim_matches) > 0)
-
 
   name_match = name_match[name_match %in% (delim_matches - 1)]
   delim_index_start = which(delim_matches == name_match + 1)

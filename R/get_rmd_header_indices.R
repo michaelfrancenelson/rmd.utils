@@ -6,7 +6,7 @@
 #'
 #' @export
 
-get_rmd_header = function(filename, file_lines = NULL, header_delimiter = "----")
+get_rmd_header_indices = function(filename, file_lines = NULL, header_delimiter = "---")
 {
   if (is.null(file_lines)) file_lines = readLines(filename)
   return(which(grepl(header_delimiter, file_lines))[1:2])

@@ -11,8 +11,10 @@ output:
 
 ```{r, echo = FALSE, results = "hide", message=FALSE} 
 # source(here::here("formatting", "functions", "rmd_functions.R"))
-source(here::here("rmd_tools", "find_file.R"))
+# source(here::here("rmd_tools", "find_file.R"))
 # dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+require(rmd.utils)
 
 exp_fun = function(x, a, b) { return(a * exp(-b * x))}
 ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}

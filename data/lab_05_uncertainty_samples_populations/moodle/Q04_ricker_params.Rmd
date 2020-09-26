@@ -10,10 +10,7 @@ output:
 
 
 ```{r, echo = FALSE, results = "hide", message=FALSE} 
-# source(here::here("formatting", "functions", "rmd_functions.R"))
-# dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
-# exp_fun = function(x, a, b) { return(a * exp(-b * x))}
-# source(here::here("rmd_tools", "find_file.R"))
+require(rmd.utils)
 
 ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
 ```
