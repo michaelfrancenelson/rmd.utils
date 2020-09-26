@@ -6,7 +6,7 @@ date: "Fall 2020"
 output:
   html_document:
     theme: readable
-    css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    # css: !expr here::here("formatting", "css", "eco_602_2020.css")
     toc: TRUE
     toc_float: TRUE
 editor_options: 
@@ -17,8 +17,6 @@ editor_options:
 require(here)
 knitr::opts_chunk$set(echo = TRUE)
 
-source(here::here("rmd_tools", "find_file.R"))
-source(here::here("rmd_tools", "build_moodle_web_questions.R"))
 
 exp_fun = function(x, a, b) { return(a * exp(-b * x))}
 ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
@@ -287,7 +285,15 @@ Your assignment is to examine the data set provided (dispersal.csv) and find at 
 
 # Lab Questions
 
-```{r results = 'hide', echo = FALSE, include=FALSE}
+```{r results='asis', echo=FALSE}
+
+  question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
+    add_moodle_quiz_questions(question_source_files[1])
+```
+
+
+
+```{r results = 'hide', echo = FALSE, include=FALSE, eval = FALSE}
 tmp = build_moodle_web_questions(
   # assignment_filename = "lab_05_data_exploration_deterministic_functions.Rmd",
   assignment_filename = "lab_05",
@@ -297,14 +303,6 @@ tmp = build_moodle_web_questions(
   cat_results = FALSE,
   write_tmp = TRUE)
 ```
-
-```{r child=tmp, echo=FALSE, include=FALSE}
-```
-```{r echo=FALSE, results = 'hide'}
-file.remove(tmp)
-```
-
-
 
 <!-- # Measuring error -->
 
