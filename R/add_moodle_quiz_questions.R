@@ -63,10 +63,24 @@ add_moodle_quiz_questions = function(
 
     if(include_solution)
     {
-      solution_indices = get_moodle_question_section_line_indices(file_lines, "Solution")[1]
-      file_lines[solution_indices] = solution_section_fmt
-      file_lines[solution_indices + 1] = ""
+      solution_indices = get_moodle_question_section_line_indices(file_lines, "Solution")
+      file_lines[solution_indices[1]] = solution_section_fmt
+      file_lines[solution_indices[1] + 1] = ""
+      file_lines[solution_indices]
     }
+
+    if (include_metadata)
+    {
+      metadata_indices = get_moodle_question_section_line_indices(file_lines, "Meta-information")
+      metadata = file_lines[metadata_indices]
+      metadata[1] = "### Meta-information"
+      metadata[2] = ""
+
+      #Insert line breaks into metadata section
+      metadata = paste0(metadata, "\n")
+      file_lines[metadata_indices] = metadata
+    }
+
 
     q_body = file_lines[-c(1:header_line_indices[2])]
 

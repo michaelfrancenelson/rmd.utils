@@ -16,8 +16,9 @@ format_moodle_question_source = function(
   lines_i,
   include_question = TRUE,
   include_solution = FALSE,
-  include_metadata = FALSE,
-  insert_line_breaks_in_metadata = TRUE)
+  # insert_line_breaks_in_metadata = TRUE,
+  include_metadata = FALSE
+  )
 {
 
   if(FALSE)
@@ -39,12 +40,12 @@ format_moodle_question_source = function(
   if (include_metadata)
   {
     # Remove the ====== delimiter
-    metadata = lines_i[metadata_line_indices][-2]
-
-    metadata[1] = "### Meta-information"
+    # metadata = lines_i[metadata_line_indices][-2]
+    metadata = lines_i[metadata_line_indices]
+    # metadata[1] = "### Meta-information"
 
     #Insert line breaks into metadata section
-      metadata = insert_line_breaks(metadata)
+      # metadata = insert_line_breaks(metadata)
   }
 
   if (include_solution)
