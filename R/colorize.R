@@ -1,5 +1,6 @@
 #' Change font color
 #'
+#' Stolen from: https://bookdown.org/yihui/rmarkdown-cookbook/font-color.html
 #'
 #' @export
 
