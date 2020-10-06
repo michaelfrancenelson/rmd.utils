@@ -424,6 +424,7 @@ add_moodle_quiz_questions_2 = function(
 
 
   temp = tempfile()
+  on.exit(unlink(temp))
 
   writeLines(out_body, temp)
 
