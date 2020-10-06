@@ -102,8 +102,6 @@ if (FALSE)
 #'
 #' @export
 
-
-
 get_moodle_question_body = function(
   filename,
   file_lines = NULL,
@@ -217,7 +215,7 @@ format_moodle_question_source = function(
 #'
 #' @export
 
-add_moodle_quiz_questions = function(
+add_moodle_quiz_questions_ = function(
   question_source_files,
   tmp_dir = here::here(),
   tmp_prefix = NULL,
@@ -307,9 +305,6 @@ add_moodle_quiz_questions = function(
       "\n",
       q_body)
 
-    # file_lines)
-
-    # get_moodle_question_body(file_lines = question_file_lines[[i]]))
   }
 
 
@@ -325,12 +320,8 @@ add_moodle_quiz_questions = function(
 #'
 #' @export
 
-add_moodle_quiz_questions_2 = function(
+add_moodle_quiz_questions = function(
   question_source_files,
-  tmp_dir = here::here(),
-  tmp_prefix = NULL,
-  include_solution = FALSE,
-  include_metadata = FALSE,
   question_number_fmt = "## Question %1$0.2d: %2$s",
   solution_section_fmt = "### Solution")
 {
@@ -348,25 +339,17 @@ add_moodle_quiz_questions_2 = function(
     add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
   }
 
-  if (is.null(tmp_prefix))
-  {
-    tmp_fmt = file.path(tmp_dir, "moodle_quiz_q_%0.2d.Rmd")
-  } else
-  {
-    tmp_fmt = file.path(tmp_dir, paste0(tmp_prefix, "_q_%0.2d.Rmd"))
-  }
-
   # Weed out any non .Rmd files
   question_source_files =
     question_source_files[grepl(".Rmd", question_source_files)]
 
   # Strip out the solution and/or metadata sections as needed
   question_file_lines = format_moodle_web_questions(
-    question_source_files, include_solution = include_solution,
+    question_source_files,
+    include_solution = include_solution,
     include_metadata = include_metadata)
 
   n_q = length(question_file_lines)
-
   out_body = c()
 
   for (i in 1:n_q)
@@ -404,7 +387,6 @@ add_moodle_quiz_questions_2 = function(
       file_lines[metadata_indices] = metadata
     }
 
-
     q_body = file_lines[-c(1:header_line_indices[2])]
 
     # Remove duplicated CSS chunk names
@@ -414,22 +396,13 @@ add_moodle_quiz_questions_2 = function(
       out_body,
       "\n",
       q_body)
-
-    # file_lines)
-
-    # get_moodle_question_body(file_lines = question_file_lines[[i]]))
   }
 
   # writeLines(out_body, sprintf(tmp_fmt, 1))
-
+  # on.exit(unlink(temp))
 
   temp = tempfile()
-  on.exit(unlink(temp))
-
   writeLines(out_body, temp)
 
   return(temp)
-
 }
-
-

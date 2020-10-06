@@ -6,11 +6,10 @@
 \usage{
 build_moodle_xml_questions(
   question_source_files,
-  question_number = NA,
-  separate_output_files = FALSE,
+  assignment_name,
+  xml_output_path,
   exam_mchoice = list(shuffle = TRUE),
   exam_schoice = list(shuffle = TRUE),
-  xml_output_path = NULL,
   xml_output_filename = NULL
 )
 }

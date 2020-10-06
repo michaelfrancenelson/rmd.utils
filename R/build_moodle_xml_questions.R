@@ -7,11 +7,10 @@
 
 build_moodle_xml_questions = function(
   question_source_files,
-  question_number = NA,
-  separate_output_files = FALSE,
+  assignment_name,
+  xml_output_path,
   exam_mchoice = list(shuffle = TRUE),
   exam_schoice = list(shuffle = TRUE),
-  xml_output_path = NULL,
   xml_output_filename = NULL
 )
 {
@@ -20,6 +19,9 @@ build_moodle_xml_questions = function(
   {
     load_all()
     require(mfn.teaching.utils)
+
+    assignment_name = "test_assignment"
+    xml_output_path = here::here("data")
 
     question_source_files =
       find_file(
@@ -32,22 +34,22 @@ build_moodle_xml_questions = function(
     exam_mchoice = list(shuffle = TRUE)
     exam_schoice = list(shuffle = TRUE)
     exam_verbose = TRUE
-    xml_output_path = NULL
     xml_output_filename = NULL
-
   }
 
-
-  question_source_files
-
-  question_basenames = tools::file_path_sans_ext(basename(question_source_files))
-  question_basenames
+  output_filename = ifelse(
+    is.null(xml_output_filename),
+    assignment_name,
+    xml_output_filename
+  )
 
  exams::exams2moodle(
     file = question_source_files,
-
-
-
+    name = assignment_name,
+    dir = xml_output_path,
+    mchoice = exam_mchoice,
+    schoice = exam_schoice,
+    verbose = TRUE
   )
 
 }
