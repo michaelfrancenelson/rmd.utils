@@ -322,6 +322,8 @@ add_moodle_quiz_questions_ = function(
 
 add_moodle_quiz_questions = function(
   question_source_files,
+  include_solution = FALSE,
+  include_metadata = FALSE,
   question_number_fmt = "## Question %1$0.2d: %2$s",
   solution_section_fmt = "### Solution")
 {
