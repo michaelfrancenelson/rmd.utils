@@ -2,8 +2,10 @@
 
 export(add_moodle_quiz_questions)
 export(add_moodle_quiz_questions_)
+export(build_assignment_doc)
 export(build_moodle_xml_questions)
 export(colorize)
+export(combine_moodle_quiz_question_source)
 export(find_file)
 export(format_moodle_question_source)
 export(format_moodle_web_questions)

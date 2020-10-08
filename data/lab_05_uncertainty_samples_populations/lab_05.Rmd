@@ -49,7 +49,11 @@ $f(x) = a \times x \times e^{-b \times x}$
 
 You can see the general form of the curve (with some hints as to how to visually parameterize it) in McGarigal's figure:
 
-![](`r find_file("mcGarigal_ricker_fun.PNG")`)
+
+```{r}
+knitr::include_graphics(find_file("mcGarigal_ricker_fun.PNG"))
+```
+
 
 - Notice that the x-coordinate of the peak depends on the parameter `b`, the initial slope depends on the parameter `a`, while the height of the maximum depends on both parameters.
 
@@ -86,9 +90,9 @@ curve(
 Here's McGarigal's infographic:
 
 
-
-
-![](`r find_file("mcGarigal_exponential_fun.PNG")`)
+```{r}
+knitr::include_graphics(find_file("mcGarigal_exponential_fun.PNG"))
+```
 
 
 ### We can create an exponential function in R:
@@ -285,7 +289,7 @@ Your assignment is to examine the data set provided (dispersal.csv) and find at 
 # Lab Questions
 
 ```{r results='hide', echo=FALSE}
-question_source_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE)
+question_source_files = find_file("Q", search_path = find_file("lab_05_un", directory = TRUE), return_all = TRUE)
 tmp = add_moodle_quiz_questions(question_source_files, include_solution = TRUE, include_metadata = FALSE)
 ```
 

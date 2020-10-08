@@ -41,16 +41,20 @@ Instructions:
 An example exploratory plotting exercise:
 
 ```{r echo=FALSE}
-png("lab_05_q3.png", width = 1200, height = 800, res = 200)
+# png("lab_05_q3.png", width = 1200, height = 800, res = 200)
 curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
 curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
 curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
 curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
-dev.off()
+# dev.off()
 ```
 
 
-![](`r find_file("lab_05_q3.png")`)
+
+```{r, echo=FALSE}
+knitr::include_graphics(find_file("lab_05_q3.png"))
+```
+
 
 <div class="questionborder">
 ### Questions

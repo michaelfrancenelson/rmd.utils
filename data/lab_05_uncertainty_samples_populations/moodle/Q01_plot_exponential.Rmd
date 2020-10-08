@@ -46,8 +46,10 @@ curve(exp_fun(x, 1.75, 0.003), add = TRUE, from = 0, to = 100, col = 66, lwd = 3
 dev.off()
 ```
 
-![](`r find_file("lab_05_q1.png")`)
-<!-- ![]("lab_05_q1.png") -->
+
+```{r, echo=FALSE}
+knitr::include_graphics(find_file("lab_05_q1.png"))
+```
 
 
 <div class="questionborder">

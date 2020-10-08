@@ -29,7 +29,7 @@ format_moodle_web_questions = function(
         include_metadata = include_metadata)
     )
 
-    return(source_lines_formatted)
+  return(source_lines_formatted)
 }
 
 
@@ -341,6 +341,109 @@ add_moodle_quiz_questions = function(
     add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
   }
 
+
+  out_body = combine_moodle_quiz_question_source(
+    question_source_files,
+    include_solution = include_solution,
+    include_metadata = include_metadata,
+    question_number_fmt = question_number_fmt,
+    solution_section_fmt = solution_section_fmt)
+  #
+  #   # Weed out any non .Rmd files
+  #   question_source_files =
+  #     question_source_files[grepl(".Rmd", question_source_files)]
+  #
+  #   # Strip out the solution and/or metadata sections as needed
+  #   question_file_lines = format_moodle_web_questions(
+  #     question_source_files,
+  #     include_solution = include_solution,
+  #     include_metadata = include_metadata)
+  #
+  #   n_q = length(question_file_lines)
+  #   out_body = c()
+  #
+  #   for (i in 1:n_q)
+  #   {
+  #     file_lines = question_file_lines[[i]]
+  #
+  #     # Harvest the title and make a title line to display in the assignment doc.
+  #     q_title = get_rmd_header_attr(file_lines = file_lines, header_prefix = "title:")
+  #     title_line = sprintf(question_number_fmt, i, q_title)
+  #
+  #     # Replace quesiton with the nicer question title
+  #     q_title_lines = get_moodle_question_section_line_indices(file_lines, "Question")[1]
+  #     file_lines[q_title_lines] = title_line
+  #     file_lines[q_title_lines + 1] = ""
+  #
+  #     header_line_indices = get_rmd_header_indices(file_lines = file_lines)
+  #
+  #     if(include_solution)
+  #     {
+  #       solution_indices = get_moodle_question_section_line_indices(file_lines, "Solution")
+  #       file_lines[solution_indices[1]] = solution_section_fmt
+  #       file_lines[solution_indices[1] + 1] = ""
+  #       file_lines[solution_indices]
+  #     }
+  #
+  #     if (include_metadata)
+  #     {
+  #       metadata_indices = get_moodle_question_section_line_indices(file_lines, "Meta-information")
+  #       metadata = file_lines[metadata_indices]
+  #       metadata[1] = "### Meta-information"
+  #       metadata[2] = ""
+  #
+  #       #Insert line breaks into metadata section
+  #       metadata = paste0(metadata, "\n")
+  #       file_lines[metadata_indices] = metadata
+  #     }
+  #
+  #     q_body = file_lines[-c(1:header_line_indices[2])]
+  #
+  #     # Remove duplicated CSS chunk names
+  #     q_body = gsub("r CSS", "r", q_body)
+  #
+  #     out_body = c(
+  #       out_body,
+  #       "\n",
+  #       q_body)
+  #   }
+  #
+  #   # writeLines(out_body, sprintf(tmp_fmt, 1))
+  #   # on.exit(unlink(temp))
+
+  temp = tempfile()
+  writeLines(out_body, temp)
+
+  return(temp)
+}
+
+
+
+#' Combine questions from mutliple moodle quiz question source files
+#'
+#' @export
+
+combine_moodle_quiz_question_source = function(
+  question_source_files,
+  include_solution = FALSE,
+  include_metadata = FALSE,
+  question_number_fmt = "## Question %1$0.2d: %2$s",
+  solution_section_fmt = "### Solution")
+{
+
+  if (FALSE)
+  {
+    tmp_dir = here::here()
+    include_solution = FALSE
+    include_metadata = FALSE
+    include_solution = TRUE
+    include_metadata = TRUE
+    solution_section_fmt = "### Solution"
+    tmp_prefix = NULL
+    question_number_fmt = "## Question %1$0.2d: %2$s"
+    add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
+  }
+
   # Weed out any non .Rmd files
   question_source_files =
     question_source_files[grepl(".Rmd", question_source_files)]
@@ -400,11 +503,95 @@ add_moodle_quiz_questions = function(
       q_body)
   }
 
-  # writeLines(out_body, sprintf(tmp_fmt, 1))
-  # on.exit(unlink(temp))
+  return(out_body)
 
-  temp = tempfile()
-  writeLines(out_body, temp)
-
-  return(temp)
 }
+
+
+#' Create an answer key for a moodle quiz-question based assignment.
+#'
+#' @export
+#'
+build_assignment_doc = function(
+  assignment_source_file,
+  question_source_files,
+  assignment_render_file = NULL,
+  key_render_file = NULL,
+  include_solution = FALSE,
+  include_metadata = FALSE,
+  question_number_fmt = "## Question %1$0.2d: %2$s",
+  solution_section_fmt = "### Solution")
+{
+
+  if (FALSE)
+  {
+
+    assignment_source_file = find_file("lab_05.Rmd", extension = ".Rmd")
+    question_source_files =
+      find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd")
+
+    assignment_file = here::here("data", "lab_05")
+    key_file = here::here("data", "lab_05_answer_key")
+
+    build_assignment_doc(
+      assignment_source_file,
+      question_source_files = question_source_files,
+      assignment_render_file = NULL,
+      # assignment_render_file = assignment_file,
+      key_render_file = key_file)
+  }
+
+
+  if (!is.null(assignment_render_file))
+  {
+    assignment_body = readLines(assignment_source_file)
+    questions_body = combine_moodle_quiz_question_source(
+      question_source_files,
+      include_solution = include_solution,
+      include_metadata = include_metadata,
+      question_number_fmt = question_number_fmt,
+      solution_section_fmt = solution_section_fmt)
+
+    assign_source = c(
+      assignment_body,
+      questions_body)
+
+    temp = tempfile()
+    temp = tempfile(fileext = ".Rmd")
+    writeLines(assign_source, temp)
+    rmarkdown::render(temp, output_file = assignment_render_file)
+    file.remove(temp)
+  }
+
+
+  if (!is.null(key_render_file))
+  {
+    key_body = combine_moodle_quiz_question_source(
+      question_source_files,
+      include_solution = TRUE,
+      include_metadata = TRUE,
+      question_number_fmt = question_number_fmt,
+      solution_section_fmt = solution_section_fmt)
+
+    assignment_header = get_rmd_header(assignment_source_file)
+    assignment_title = get_rmd_header_attr(NULL, assignment_header, header_prefix = "subtitle:")
+    key_title = paste0('"', "Answer key - ", assignment_title, '"')
+
+    key_source = c(
+      substitute_rmd_header_attr(assignment_header, "subtitle:", key_title),
+      key_body)
+
+    temp = tempfile()
+    temp = tempfile(fileext = ".Rmd")
+    writeLines(key_source, temp)
+    rmarkdown::render(temp, output_file = key_render_file)
+    file.remove(temp)
+  }
+
+}
+
+
+
+
+
+

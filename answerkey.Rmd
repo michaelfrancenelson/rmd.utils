@@ -1,0 +1,1114 @@
+---
+title: "ECo 634 - Analysis of Environmental Data Lab"
+subtitle: "Answer key - Lab 05: Modeling Errors"
+author: "Michael France Nelson"
+date: "Fall 2020"
+output:
+  html_document:
+    theme: readable
+    # css: !expr here::here("formatting", "css", "eco_602_2020.css")
+    toc: TRUE
+    toc_float: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+## Question 01: Exponential plots
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Complete the template R code to build your exponential function.  Make sure you read the note about parameter `b` in the lab instructions.
+2. To gain visual intuition, try using `curve()` to plot your function.
+  - Try out different values of the two parameters as well as plotting over different ranges of x-values.
+  - Try plotting two or more curves with slightly different parameter values on the same plot
+  - You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+  - Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+```{r echo=FALSE, warning=FALSE}
+png("lab_05_q1.png", width = 1200, height = 800, res = 200)
+curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 50, ann = FALSE, axes = FALSE, ylab = "f(x)"); box()
+curve(exp_fun(x, 1.2, 0.1), add = TRUE, from = 0, to = 100, col = 2)
+curve(exp_fun(x, 1.2, 0.3), add = TRUE, from = 0, to = 100, col = 3, lty = 2, lwd = 3)
+curve(exp_fun(x, 1.5, 0.03), add = TRUE, from = 0, to = 100, col = 4, lwd = 2)
+curve(exp_fun(x, 1.75, 0.003), add = TRUE, from = 0, to = 100, col = 66, lwd = 3, lty = 4)
+dev.off()
+```
+
+
+```{r, echo=FALSE}
+knitr::include_graphics(find_file("lab_05_q1.png"))
+```
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Paste the R code you used to create `exp_fun()`
+- Q2 (3 pts.) Create a single plot containing 4 curves with these parameter values:
+  - curve 1: a = 1.9, b = 0.1, line color = black, line texture = solid
+  - curve 2: a = 1.9, b = 0.3, line color = black, line texture = dotted
+  - curve 3: a = 1.2, b = 0.2, line color = red, line texture = solid
+  - curve 4: a = 1.2, b = 0.4, line color = red, line texture = dotted
+
+</div>
+
+
+
+
+### Solution
+
+
+```{r}
+
+exp_fun = function(x, a, b) 
+{ 
+  return(a * exp(-b * x))
+}
+
+
+# curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 30, ann = FALSE, axes = FALSE); box()
+curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 30, ylab = "f(x)")
+curve(exp_fun(x, 1.9, 0.3), add = TRUE, from = 0, to = 100, col = 1, lty = 2)
+curve(exp_fun(x, 1.2, 0.2), add = TRUE, from = 0, to = 100, col = 2, lty = 1)
+curve(exp_fun(x, 1.2, 0.4), add = TRUE, from = 0, to = 100, col = 2, lty = 2)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: Exponential plots
+
+extype: string
+
+exsolution: nil
+
+exname: lab 5
+
+exsection: lab 5
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 10
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 5
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+## Question 02: Exponential parameters
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+> Consider the plot you made with the 4 exponential curves.
+
+Observe how the curves vary as you change the two parameters' values.
+
+<div class="questionborder">
+### Questions
+- Q1 (2 pts.) Qualitatively describe what happens to the curve as you vary parameter `a`
+- Q2 (2 pts.) Qualitatively describe what happens to the curve as you vary parameter `b`
+</div>
+
+
+
+
+### Solution
+
+
+- Parameter `a` sets the y-intercept.
+- Parameter `b` sets the [initial] steepness of the decay.
+- Students may notice that a also affects the steepness of the decay.
+
+```{r}
+
+exp_fun = function(x, a, b) 
+{ 
+  return(a * exp(-b * x))
+}
+
+curve(exp_fun(x, 1.9, 0.1), add = FALSE, from = 0, to = 30,  col = 1, ylab = "f(x)")
+curve(exp_fun(x, 1.9, 0.3), add = TRUE,  from = 0, to = 100, col = 1, lty = 2)
+curve(exp_fun(x, 1.2, 0.2), add = TRUE,  from = 0, to = 100, col = 2, lty = 1)
+curve(exp_fun(x, 1.2, 0.4), add = TRUE,  from = 0, to = 100, col = 2, lty = 2)
+curve(exp_fun(x, 0.9, 0.4), add = TRUE,  from = 0, to = 100, col = 3, lty = 2)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: Exponential parameters
+
+extype: string
+
+exsolution: nil
+
+exname: lab 5
+
+exsection: lab 5
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 15
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+# source(here::here("formatting", "functions", "rmd_functions.R"))
+# source(here::here("rmd_tools", "find_file.R"))
+# dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+require(rmd.utils)
+
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+
+# exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+## Question 03: Ricker plots
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. To gain visual intuition, try using `curve()` to plot the Ricker function.
+  - Try out different values of the two parameters as well as plotting over different ranges of x-values.
+  - Try plotting two or more curves with slightly different parameter values on the same plot
+  - You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+  - Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+```{r echo=FALSE}
+# png("lab_05_q3.png", width = 1200, height = 800, res = 200)
+curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
+curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
+curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
+curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
+# dev.off()
+```
+
+
+
+```{r, echo=FALSE}
+knitr::include_graphics(find_file("lab_05_q3.png"))
+```
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Create a single plot containing 6 Ricker curves with these parameter values:
+  - curve 1: a = 25, b = 0.1, line color = black, line texture = solid
+  - curve 2: a = 20, b = 0.2, line color = black, line texture = dotted
+  - curve 3: a = 10, b = 0.2, line color = black, line texture = dotted
+  - curve 4: a = 75, b = 0.3, line color = red, line texture = solid
+  - curve 5: a = 50, b = 0.3, line color = red, line texture = dotted
+  - curve 6: a = 40, b = 0.3, line color = red, line texture = dotted
+
+</div>
+
+
+
+
+### Solution
+
+
+```{r}
+curve(ricker_fun(x, 25, 0.1), add = FALSE, from = 0, to = 50, ylab = "f(x)")
+curve(ricker_fun(x, 20, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 10, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 75, 0.3), add = TRUE, col = 2, lty = 1)
+curve(ricker_fun(x, 50, 0.3), add = TRUE, col = 2, lty = 2)
+curve(ricker_fun(x, 40, 0.3), add = TRUE, col = 2, lty = 2)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: Ricker plots
+
+extype: string
+
+exsolution: nil
+
+exname: lab 5
+
+exsection: lab 5
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: FALSE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+## Question 04: Ricker params
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. To gain visual intuition, try using `curve()` to plot the Ricker function.
+  - Try out different values of the two parameters as well as plotting over different ranges of x-values.
+  - Try plotting two or more curves with slightly different parameter values on the same plot
+  - You may need to try out different ranges of x-values in your plot windows to make sure you are focusing on the interesting parts of the curves.
+  - Try different line colors, widths, and textures.
+
+An example exploratory plotting exercise:
+
+```{r echo=FALSE}
+curve(ricker_fun(x, 25.1, .5), add = FALSE, from = 0, to = 10, ann = FALSE, ylab = "f(x)", ylim = c(0, 30)); box()
+curve(ricker_fun(x, 20.2, .3), add = TRUE, col = 2)
+curve(ricker_fun(x, 49.2, .66), add = TRUE, col = 3, lty = 2, lwd = 3)
+curve(ricker_fun(x, 10.5, 0.8), add = TRUE, col = 4, lwd = 2)
+# curve(ricker_fun(x, 1.75, 0.003), add = TRUE, from = 0, to = 100, col = 66, lwd = 3, lty = 4)
+
+```
+
+
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Qualitatively describe how the `a` parameter influences the curve shape.
+- Q2 (2 pts.) Qualitatively describe how the `b` parameter influences the curve shape.
+
+</div>
+
+<div class="hintborder"> NOTE: make sure you choose an appropriate range of x-values in your plot.</div>
+
+
+
+### Solution
+
+
+```{r}
+curve(ricker_fun(x, 25, 0.1), add = FALSE, from = 0, to = 50, ylab = "f(x)")
+curve(ricker_fun(x, 20, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 10, 0.1), add = TRUE, col = 1, lty = 2)
+curve(ricker_fun(x, 75, 0.3), add = TRUE, col = 2, lty = 1)
+curve(ricker_fun(x, 50, 0.3), add = TRUE, col = 2, lty = 2)
+curve(ricker_fun(x, 40, 0.3), add = TRUE, col = 2, lty = 2)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: Ricker params
+
+extype: string
+
+exsolution: nil
+
+exname: lab 5
+
+exsection: lab 5
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: FALSE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+```
+
+
+## Question 05: salamander data scatterplot
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+Instructions:
+
+1. Read the salamander dispersal data into a `data.frame` called `dat_dispersal`.
+2. Create a scatterplot of distance class and dispersal rate of first time breeding salamanders.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (1 pts.) Upload an image file with your scatterplot.  Make sure it has appropriate axis labels and title.
+- Q2 (2 pts.) Describe, in nontechnical language, what is shown on the x-axis
+- Q3 (2 pts.) Describe, in nontechnical language, what is shown on the y-axis
+
+</div>
+
+
+
+
+### Solution
+
+
+```{r}
+dat_dispersal
+plot(dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, xlab = "distance class", ylab = "standardized dispersal rate", main = "Marbled Salamander - first time breeders")
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander data scatterplot
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: editor
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 5
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+## Question 06: salamander linear model
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Recall the function we have used to visually estimate linear model parameters:
+
+```{r}
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Instructions:
+
+1. Using the scatterplot of the dispersal data, visually fit a linear mode
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (2 pts.) Upload an image file with your scatterplot and fitted line.  Make sure it has appropriate axis labels and title.
+
+</div>
+
+
+
+
+### Solution
+
+
+```{r}
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+For example:
+
+```{r}
+plot(dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, xlab = "distance class", ylab = "standardized dispersal rate", main = "Marbled Salamander - first time breeders")
+curve(line_point_slope(x, 1400, 0.1, -0.0001), add = TRUE)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander linear model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 2
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+## Question 07: salamander exponential model
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Instructions:
+
+1. Using the scatterplot of the dispersal data, visually fit an model
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Upload an image file with your scatterplot and fitted curve.  Make sure it has appropriate axis labels and title.
+
+</div>
+
+
+
+
+### Solution
+
+
+
+```{r}
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+```{r}
+plot(dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, xlab = "distance class", ylab = "standardized dispersal rate",
+     main = "Marbled Salamander - first time breeders\nExponential model")
+curve(exp_fun(x, 0.75, 0.003), add = TRUE)
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander linear model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+## Question 08: salamander ricker model
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Instructions:
+
+1. Using the scatterplot of the dispersal data, visually fit a ricker curve model.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Upload an image file with your scatterplot and fitted curve.  Make sure it has appropriate axis labels and title.
+
+</div>
+
+
+
+
+### Solution
+
+
+
+```{r}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+For example:
+
+```{r}
+plot(dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, xlab = "distance class", ylab = "standardized dispersal rate",
+     main = "Marbled Salamander - first time breeders\nRicker model")
+curve(ricker_fun(x, 0.007, 1/200), add = TRUE)
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander ricker model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+## Question 09: salamander linear model residuals
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+> Recall the function we have used to visually estimate linear model parameters:
+
+```{r}
+# Calculates the value of x for a linear function, given the coordinates
+# of a known point (x1, y1) and the slope of the line.
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+
+Instructions:
+
+1. Using the parameters you chose for your linear fit, calculate the residuals and store them in a vector `resids_linear`.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (3 pts.) Paste the code you used to create `resids_linear`.
+- Q1 (1 pts.) Upload an image file with a histogram of the residuals of your linear model.
+
+</div>
+
+
+
+
+### Solution
+
+
+```{r}
+line_point_slope = function(x, x1, y1, slope)
+{
+  get_y_intercept = 
+    function(x1, y1, slope) 
+      return(-(x1 * slope) + y1)
+  
+  linear = 
+    function(x, yint, slope) 
+      return(yint + x * slope)
+  
+  return(linear(x, get_y_intercept(x1, y1, slope), slope))
+}
+```
+
+For example:
+
+```{r}
+
+param_x1 = 1400
+param_y1 = 0.1
+param_slope = -0.0001
+
+plot(dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, xlab = "distance class", ylab = "standardized dispersal rate", main = "Marbled Salamander - first time breeders\nLinear model")
+curve(line_point_slope(x, param_x1, param_y1, param_slope), add = TRUE)
+
+
+resids_linear = 
+line_point_slope(dat_dispersal$dist.class, param_x1, param_y1, param_slope) - dat_dispersal$disp.rate.ftb
+
+
+hist(resids_linear, main = "residuals: linear model")
+
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander linear model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+```
+
+
+## Question 10: salamander exponential model residuals
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Instructions:
+
+1. Using the parameters you chose for your exponential fit, calculate the residuals and store them in a vector `resids_exp`.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Upload an image file with a histogram of the residuals of your exponential model.
+
+
+</div>
+
+
+
+
+### Solution
+
+
+
+```{r}
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+plot(dat_dispersal$dist.class,
+     dat_dispersal$disp.rate.ftb,
+     xlab = "distance class", ylab = "standardized dispersal rate",
+     main = "Marbled Salamander - first time breeders\nExponential model")
+exp_a = 0.75
+exp_b = 0.003
+curve(exp_fun(x, exp_a, exp_b), add = TRUE)
+
+
+resids_exp = exp_fun(dat_dispersal$dist.class, exp_a, exp_b) - dat_dispersal$disp.rate.ftb 
+hist(resids_exp)
+
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander linear model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
+
+
+
+
+```{r, echo = FALSE, results = "hide", message=FALSE} 
+require(rmd.utils)
+dat_dispersal = read.csv(find_file("salamander_dispersal.csv"))
+exp_fun = function(x, a, b) { return(a * exp(-b * x))}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+
+
+## Question 11: salamander ricker model residuals
+
+
+```{r, echo = FALSE, results = "asis"}
+cat(readLines(here::here("formatting", "css", "styles.css")))
+```
+
+
+
+Instructions:
+
+1. Using the parameters you chose for your Ricker curve fit, calculate the residuals and store them in a vector `resids_ricker`.
+
+
+1. Using the scatterplot of the dispersal data, visually fit a ricker curve model.
+
+
+<div class="questionborder">
+### Questions
+
+- Q1 (4 pts.) Upload an image file with a histogram of the residuals of your Ricker curve model.
+
+</div>
+
+
+
+
+### Solution
+
+
+
+```{r}
+ricker_fun = function(x, a, b) { return(a * x * exp(-b * x))}
+```
+For example:
+
+```{r}
+plot(
+  dat_dispersal$dist.class, dat_dispersal$disp.rate.ftb, 
+  xlab = "distance class", ylab = "standardized dispersal rate",
+     main = "Marbled Salamander - first time breeders\nRicker model")
+
+rick_a = 0.007
+rick_b = 1/200
+
+
+resids_ricker = ricker_fun(dat_dispersal$dist.class, rick_a, rick_b) - dat_dispersal$disp.rate.ftb 
+hist(resids_ricker)
+
+
+curve(ricker_fun(x, rick_a, rick_b), add = TRUE)
+```
+
+
+
+
+
+### Meta-information
+
+
+
+extitle: salamander ricker model
+
+extype: string
+
+exsolution: nil
+
+exname: lab 4
+
+exsection: lab 4
+
+exextra[essay,logical]: TRUE
+
+exextra[essay_format,character]: noinline
+
+exextra[essay_required,logical]: TRUE
+
+exextra[essay_fieldlines,numeric]: 5
+
+exextra[essay_attachments,numeric]: 1
+
+exextra[essay_attachmentsrequired,logical]: TRUE
+
+expoints: 4
+
