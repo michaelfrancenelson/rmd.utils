@@ -4,11 +4,30 @@
 #'
 #' @export
 
-colorize <- function(x, color) {
-  if (knitr::is_latex_output()) {
-    sprintf("\\textcolor{%s}{%s}", color, x)
-  } else if (knitr::is_html_output()) {
-    sprintf("<span style='color: %s;'>%s</span>", color,
-            x)
-  } else x
+colorize <- function(x, color, italic = FALSE, bold = FALSE)
+{
+  if (FALSE)
+  {
+    x = "abc"
+    color = "blue"
+    italic = TRUE
+    bold = TRUE
+  }
+
+  if (knitr::is_latex_output())
+  {
+    out = sprintf("\\textcolor{%s}{%s}", color, x)
+    if (italic) out = sprintf("\\textit{%s}", out)
+    if (bold)   out = sprintf("\\textbf{%s}", out)
+
+    sprintf(out)
+
+  } else if (knitr::is_html_output())
+  {
+    out = sprintf("<span style='color: %s;", color)
+    if (italic) out = sprintf("%s font-style: italic;", out)
+    if (bold)   out = sprintf("%s font-weight:bold;", out)
+
+    sprintf("%s'>%s</span>", out, x)
+  }
 }
