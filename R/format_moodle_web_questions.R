@@ -392,11 +392,9 @@ build_assignment_doc = function(
       assignment_body,
       questions_body)
 
-    # temp = tempfile()
     temp = tempfile(fileext = ".Rmd")
     writeLines(assign_source, temp)
     rmarkdown::render(temp, output_file = assignment_render_file)
-    file.remove(temp)
   }
 
 
@@ -417,11 +415,9 @@ build_assignment_doc = function(
       substitute_rmd_header_attr(assignment_header, "subtitle:", key_title),
       key_body)
 
-    temp = tempfile()
     temp = tempfile(fileext = ".Rmd")
     writeLines(key_source, temp)
     rmarkdown::render(temp, output_file = key_render_file)
-    file.remove(temp)
   }
 
 }
