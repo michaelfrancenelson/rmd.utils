@@ -11,6 +11,7 @@ build_assignment_doc(
   key_render_file = NULL,
   include_solution = FALSE,
   include_metadata = FALSE,
+  include_metadata_key = FALSE,
   question_number_fmt = "## Question \%1$0.2d: \%2$s",
   solution_section_fmt = "### Solution"
 )

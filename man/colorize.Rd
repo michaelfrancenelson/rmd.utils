@@ -4,7 +4,7 @@
 \alias{colorize}
 \title{Change font color}
 \usage{
-colorize(x, color)
+colorize(x, color, italic = FALSE, bold = FALSE)
 }
 \description{
 Stolen from: https://bookdown.org/yihui/rmarkdown-cookbook/font-color.html
