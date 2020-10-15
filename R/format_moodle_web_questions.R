@@ -556,7 +556,7 @@ build_assignment_doc = function(
       assignment_body,
       questions_body)
 
-    temp = tempfile()
+    # temp = tempfile()
     temp = tempfile(fileext = ".Rmd")
     writeLines(assign_source, temp)
     rmarkdown::render(temp, output_file = assignment_render_file)
