@@ -38,8 +38,6 @@ build_assignment_doc = function(
       doc_target_file = a_f$doc_target_file,
       key_target_file = a_f$key_target_file
     )
-
-
   }
 
 
@@ -63,25 +61,75 @@ build_assignment_doc = function(
   }
 
   if (!is.null(key_target_file))
-  {
-    key_body = combine_moodle_quiz_question_source(
+    build_answer_key(
+      doc_source_file = doc_source_file,
+      question_source_files = question_source_files,
+      key_target_file = key_target_file,
+      include_metadata_key = include_metadata_key)
+
+  # {
+  #   key_body = combine_moodle_quiz_question_source(
+  #     question_source_files,
+  #     include_solution = TRUE,
+  #     include_metadata = include_metadata_key,
+  #     question_number_fmt = question_number_fmt,
+  #     solution_section_fmt = solution_section_fmt)
+  #
+  #   assignment_header = get_rmd_header(doc_source_file)
+  #   assignment_title = get_rmd_header_attr(NULL, assignment_header, header_prefix = "subtitle:")
+  #   key_title = paste0('"', "Answer key - ", assignment_title, '"')
+  #
+  #   key_source = c(
+  #     substitute_rmd_header_attr(assignment_header, "subtitle:", key_title),
+  #     key_body)
+  #
+  #   temp = tempfile(fileext = ".Rmd")
+  #   writeLines(key_source, temp)
+  #   rmarkdown::render(temp, output_file = key_target_file)
+  # }
+}
+
+
+#' Create an answer key for a moodle quiz-question based assignment.
+#'
+#' @export
+#'
+
+
+build_answer_key = function(
+  doc_source_file,
+  question_source_files,
+  key_target_file = NULL,
+  include_solution = FALSE,
+  # include_metadata = FALSE,
+  include_metadata_key = FALSE,
+  question_number_fmt = "## Question %1$0.2d: %2$s",
+  solution_section_fmt = "### Solution")
+{
+  key_body =
+    combine_moodle_quiz_question_source(
       question_source_files,
       include_solution = TRUE,
       include_metadata = include_metadata_key,
       question_number_fmt = question_number_fmt,
       solution_section_fmt = solution_section_fmt)
 
-    assignment_header = get_rmd_header(doc_source_file)
-    assignment_title = get_rmd_header_attr(NULL, assignment_header, header_prefix = "subtitle:")
-    key_title = paste0('"', "Answer key - ", assignment_title, '"')
+  assignment_header = get_rmd_header(doc_source_file)
+  assignment_title = get_rmd_header_attr(
+    NULL,
+    assignment_header,
+    header_prefix = "subtitle:")
 
-    key_source = c(
-      substitute_rmd_header_attr(assignment_header, "subtitle:", key_title),
-      key_body)
+  key_title = paste0('"', "Answer key - ", assignment_title, '"')
 
-    temp = tempfile(fileext = ".Rmd")
-    writeLines(key_source, temp)
-    rmarkdown::render(temp, output_file = key_target_file)
-  }
+  key_source = c(
+    substitute_rmd_header_attr(
+      assignment_header,
+      "subtitle:",
+      key_title),
+    key_body)
 
+  temp = tempfile(fileext = ".Rmd")
+  writeLines(key_source, temp)
+  rmarkdown::render(temp, output_file = key_target_file)
 }
