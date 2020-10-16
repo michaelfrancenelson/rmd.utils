@@ -347,7 +347,7 @@ combine_moodle_quiz_question_source = function(
 #'
 #' @export
 #'
-build_assignment_doc = function(
+deprecated_build_assignment_doc = function(
   assignment_source_file,
   question_source_files,
   assignment_render_file = NULL,

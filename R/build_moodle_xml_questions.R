@@ -45,7 +45,7 @@ build_moodle_xml_questions = function(
 
  exams::exams2moodle(
     file = question_source_files,
-    name = assignment_name,
+    name = output_filename,
     dir = xml_output_path,
     mchoice = exam_mchoice,
     schoice = exam_schoice,
