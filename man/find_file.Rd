@@ -13,7 +13,8 @@ find_file(
   directory = FALSE,
   extension = NULL,
   error_if_none = TRUE,
-  recursive = TRUE
+  recursive = TRUE,
+  exact_match = FALSE
 )
 }
 \arguments{
