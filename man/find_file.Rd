@@ -12,7 +12,8 @@ find_file(
   verbose = FALSE,
   directory = FALSE,
   extension = NULL,
-  error_if_none = TRUE
+  error_if_none = TRUE,
+  recursive = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ find_file(
 \item{extension}{Search for files with this extension only?}
 
 \item{error_if_none}{Throw an error if no matches are found?  If FALSE, the function returns a NULL value.}
+
+\item{recursive}{Search recursively?}
 }
 \value{
 The absolute path to the file, if it was found.

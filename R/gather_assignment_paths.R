@@ -41,6 +41,19 @@ gather_assignment_paths = function(
     source_file_fmt = "%s_%0.2d"
     source_search_path = NULL
 
+
+    out_dir = here::here("docs", "assignments", "eco_602", "reading_questions")
+    out_fmt = "%s_week_%0.2d"
+    source_dir_fmt = "%s_week_%0.2d_"
+    source_file_fmt = "%s_week_%0.2d"
+    source_search_path = NULL
+
+    week_n = 12
+    assignment_prefix = "reading_questions"
+
+
+
+
     key_file_fmt = "%s_%0.2d_answer_key"
     key_out_dir = here::here("docs", "answer_keys")
 
@@ -54,9 +67,8 @@ gather_assignment_paths = function(
     doc_source_ext = ".Rmd"
     question_source_ext = ".Rmd"
 
-    mdl_question_fmt
-
-    sss = sprintf("Q_%0.2s_%s_%0.2d", "%0.2d", assignment_prefix, week_n)
+    # mdl_question_fmt
+    # sss = sprintf("Q_%0.2s_%s_%0.2d", "%0.2d", assignment_prefix, week_n)
 
 
   }
