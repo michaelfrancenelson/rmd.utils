@@ -1,16 +1,20 @@
-get_rmd_chunks = function(filename, file_lines = NULL)
+#' Get all the chunk names and the start/end line numbers for the corresponding source code.
+#'
+#' @export
+
+
+get_rmd_chunks = function(filename = NULL, file_lines = NULL)
 {
   if (is.null(file_lines)) file_lines = readLines(filename)
-  chunk_indices = chunk_indices = get_rmd_chunk_indices(file_lines = file_lines)
 
-  chunk_indices
+  chunk_indices = get_rmd_chunk_indices(file_lines = file_lines)
   chunk_list = apply(chunk_indices, 1, function(x) file_lines[x[1]:x[2]])
-
-
   names(chunk_list) = chunk_indices[, 3]
 
   return(chunk_list)
 }
+
+
 
 #' Get the yaml header from an Rmd file
 #'
@@ -45,27 +49,10 @@ get_rmd_chunk_indices = function(filename, file_lines = NULL)
     start_line = file_lines[start_indices[i]]
     reg_match = regmatches(start_line, regexpr("r\\s.+?[,}=<>]", file_lines[start_indices[i]]))
 
-    # reg_match = regmatches(start_line, regexpr("r .+,", file_lines[start_indices[i]]))
-    # reg_match = regmatches(start_line, regexpr("r .+?[\\s,}]", file_lines[start_indices[i]]))
-    # reg_match = regmatches(start_line, regexpr("r .+[,}\\s]", file_lines[start_indices[i]]))
-    # regmatches(start_line, regexpr("r .+[,,}\\s]", file_lines[start_indices[i]]))
-    # regmatches(start_line, regexpr("r .+,", file_lines[start_indices[i]]))
-    #
-    # regmatches(start_line, regexpr("r .+", file_lines[start_indices[i]]))
-    # regmatches(start_line, regexpr("r .+", file_lines[start_indices[i]]))
-    # regmatches(start_line, regexpr("r .+,", file_lines[start_indices[i]]))
-
-
-    # chunk_name = trimws(gsub(",", "", gsub("r ", "", reg_match)))
     chunk_name =
-      # trimws(gsub("r ", "", gsub("[\\s,}]", "", reg_match)))
       trimws(gsub("r ", "", gsub("[,}=<>]", "", reg_match)))
 
-
-    if(length(chunk_name) == 0) chunk_name = "" else
-
-
-      chunk_name
+    if(length(chunk_name) == 0) chunk_name = ""
 
     out_row = data.frame(
       start_index = start_indices[i] + 1,
@@ -85,16 +72,59 @@ get_rmd_chunk_indices = function(filename, file_lines = NULL)
 
 
 
+
+#'
+#'
+#'
+#' @export
+
+source_rmd_chunks = function(filename, file_lines = NULL, chunk_names = NULL)
+{
+
+
+  if (FALSE)
+  {
+    filename = find_file("lab_05.Rmd", exact_match = TRUE)
+    file_lines = NULL
+    chunk_names = NULL
+  }
+
+  if (is.null(file_lines)) file_lines = readLines(filename)
+  chunks = get_rmd_chunks(file_lines = file_lines)
+
+  e <- environment() # current environment
+  e = .GlobalEnv
+  p <- parent.env(e)
+  lapply(chunks, function(x) evaluate::evaluate(
+    # textConnection(x), stop_on_error = 0, envir = globalenv()))
+    textConnection(x), stop_on_error = 0, envir = e))
+}
+
+
+
 if (FALSE)
 {
-  rm(list = ls())
   require(rmd.utils)
+  rm(list = ls())
+  devtools::document()
+  devtools::load_all()
+  devtools::install()
   fn = find_file("lab_05.Rmd", exact_match = TRUE)
+
+  source_rmd_chunks(fn)
+  source_rmd_chunks(fn, chunk_names = "setup")
+
   file_lines = readLines(fn)
   chunk_indices = get_rmd_chunk_indices(file_lines = file_lines)
 
-  chunk_indices
+  chunks = get_rmd_chunks(filename = fn)
 
+  chunks
+
+  evaluate::evaluate(textConnection(chunks$setup))
+
+
+  lapply(chunks, evaluate::evaluate)
   i = 1
 
 
@@ -103,6 +133,12 @@ if (FALSE)
   chunk_text_1
 
   regmatches(chunk_text_1, regexpr("r .+?[\\s,}]", chunk_text_1))
+
+
+  f = function()
+  {
+    evaluate::evalute("x <<- 2")
+  }
 
 
   match_1 = regmatches(chunk_text_1, regexpr("r .+,", chunk_text_1))
@@ -118,73 +154,3 @@ if (FALSE)
 }
 
 #'
-#'
-#' @export
-
-get_rmd_header_attr = function(
-  filename,
-  file_lines = NULL,
-  header_prefix = "title:",
-  yaml_header_delimiter = "----")
-{
-
-  if (FALSE)
-  {
-    file_lines = NULL
-    filename = "C:/Users/michaelnelso/git/eco_602_634_2020/assignments/individual_assignments/week_03_data_exploration_deterministic_functions/moodle/Q1_histograms_elevation.Rmd"
-    file_lines = readLines(filename, warn = FALSE)
-    title_prefix = "title:"
-  }
-
-  # get_rmd_header = function(filename, file_lines = NULL)
-  # {
-  #   if (is.null(file_lines)) file_lines = readLines(filename)
-  #   header_symbols = which(grepl("---", file_lines))
-  #   return(file_lines[header_symbols[1]:header_symbols[2]])
-  # }
-  if (is.null(file_lines)) file_lines = readLines(filename, warn = FALSE)
-
-  header_lines = get_rmd_header(NULL, file_lines = file_lines)
-  header_line = header_lines[grepl(header_prefix, header_lines)]
-  header_attr = gsub("\"", "", trimws(gsub(header_prefix, "", header_line)))
-  return(header_attr)
-}
-
-
-
-#' Get the line indices of the header in an Rmd file
-#'
-#' @param filename the name of the Rmd file to read
-#' @param file_lines a character vector containing the lines of a source Rmd file.
-#' @param header_delimiter the delimiter for the beginning and ending of the Rmd header section.
-#'
-#' @export
-
-get_rmd_header_indices = function(filename, file_lines = NULL, header_delimiter = "---")
-{
-  if (is.null(file_lines)) file_lines = readLines(filename)
-  return(which(grepl(header_delimiter, file_lines))[1:2])
-}
-
-
-
-
-#' Swap the value of an Rmd header attribute
-#'
-#' @param header_lines A character vector with the lines of the header
-#' @param attr_prefix The name of the attribute (with ending colon)
-#' @param new_attr_val The value to substitute
-#'
-#'
-#'
-#' @export
-
-substitute_rmd_header_attr = function(
-  header_lines,
-  attr_prefix = "title:",
-  new_attr_val)
-{
-  attr_line = which(grepl(attr_prefix, header_lines))
-  header_lines[attr_line] = sprintf("%s %s", attr_prefix, new_attr_val)
-  return(header_lines)
-}
