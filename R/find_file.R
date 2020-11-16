@@ -11,6 +11,7 @@
 #' @param directory Search for a directory instead of a file?
 #' @param extension Search for files with this extension only?
 #' @param error_if_none Throw an error if no matches are found?  If FALSE, the function returns a NULL value.
+#' @param recursive Search recursively?
 #'
 #' @return The absolute path to the file, if it was found.
 #' @export
@@ -20,11 +21,29 @@ find_file = function(
   search_path = NULL,
   return_all = FALSE,
   duplicated_files_error = FALSE,
-  verbose=FALSE,
+  verbose = FALSE,
   directory = FALSE,
   extension = NULL,
-  error_if_none = TRUE)
+  error_if_none = TRUE,
+  recursive = TRUE,
+  exact_match = FALSE)
 {
+
+  if (FALSE)
+  {
+    filename = "lab_05"
+    filename = "_05"
+    search_path = NULL
+    return_all = FALSE
+    duplicated_files_error = FALSE
+    verbose = FALSE
+    directory = FALSE
+    extension = NULL
+    error_if_none = TRUE
+    recursive = TRUE
+    exact_match = FALSE
+  }
+
 
   if (is.null(search_path))  search_path = here::here()
 
@@ -34,7 +53,7 @@ find_file = function(
       list.files(
         path = search_path,
         pattern = filename,
-        recursive = TRUE,
+        recursive = recursive,
         full.names = TRUE,
         include.dirs = TRUE)
 
@@ -44,11 +63,17 @@ find_file = function(
       list.files(
         path = search_path,
         pattern = filename,
-        recursive = TRUE,
+        recursive = recursive,
         full.names = TRUE)
 
 
-  # If no matches are found:
+  if (exact_match)
+  {
+    matches = matches[filename == basename(matches)]
+  }
+
+
+
   if (length(matches) == 0)
   {
     if(verbose) print(sprintf("File '%s' not found", filename))
