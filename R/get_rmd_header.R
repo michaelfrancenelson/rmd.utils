@@ -23,10 +23,11 @@ get_rmd_header_attr = function(
   header_prefix = "title:",
   yaml_header_delimiter = "----")
 {
+
   if (FALSE)
   {
     file_lines = NULL
-    filename = "C:/Users/michaelnelso/git/eco_602_634_2020/assignments/eco_602/week_03_data_exploration_deterministic_functions/moodle/Q1_histograms_elevation.Rmd"
+    filename = "C:/Users/michaelnelso/git/eco_602_634_2020/assignments/individual_assignments/week_03_data_exploration_deterministic_functions/moodle/Q1_histograms_elevation.Rmd"
     file_lines = readLines(filename, warn = FALSE)
     title_prefix = "title:"
   }

@@ -50,7 +50,7 @@ $f(x) = a \times x \times e^{-b \times x}$
 You can see the general form of the curve (with some hints as to how to visually parameterize it) in McGarigal's figure:
 
 
-```{r}
+```{r mcGarigal_ricker}
 knitr::include_graphics(find_file("mcGarigal_ricker_fun.PNG"))
 ```
 
