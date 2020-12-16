@@ -145,6 +145,50 @@ get_moodle_question_body = function(
 }
 
 
+
+
+#'
+#'
+#' @export
+
+get_moodle_question_section = function(
+  filename,
+  file_lines = NULL,
+  section_header = "Question",
+  delimiter = "========",
+  rm_css_chunk_name = TRUE)
+{
+  if (FALSE)
+  {
+    section_header = "Question"
+    delimiter = "======"
+
+    file_lines = readLines("/Users/michaelnelso/git/intro_quant_ecol/2021_spring/assignments/setup_course_software/moodle_questions/setup_course_software_Q1.Rmd")
+
+    filename = question_source_files$question_source_files[1]
+  }
+
+  if (is.null(file_lines)) file_lines = readLines(filename)
+
+  # Find adjacent lines matching the `exams` package question and solution section delimiters
+  delimiter_lines = which(grepl(delimiter, file_lines))
+  section_lines = which(grepl(section_header, file_lines))[1]
+
+  section_start_line = section_lines[section_lines %in% (delimiter_lines - 1)]
+
+  delimiter_end_index = which(delimiter_lines==(section_start_line + 1)) + 1
+
+  if(length(delimiter_lines) < delimiter_end_index){
+  section_end_line = length(file_lines)
+  } else section_end_line = delimiter_lines[delimiter_end_index] - 2
+
+  section_body = file_lines[section_start_line:section_end_line]
+
+  return(section_body)
+  # return(file_lines[(q_line + 2) : (s_line - 1)])
+}
+
+
 #' Format a moodle question source file
 #'
 #' Prepare the text of a moodle question source file by including or excluding
