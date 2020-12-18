@@ -39,17 +39,93 @@ format_moodle_web_questions = function(
 #' Finds the line indices of a section in an .Rmd file formatted
 #' for use with the 'exams' package.
 #'
-#' @param rmd_source_lines A character vector with the lines of the .Rmd source file.
-#' @param section_name Name of section, e.g. "Question", "Solution", "Meta-information"
-#' @param section_delimiter The section break delimiter to search for
+#' @param lines A character vector with the lines of the .Rmd source file.
+#' @param header Name of section, e.g. "Question", "Solution", "Meta-information"
+#' @param delim The section break delimiter to search for
 #'
 #' @export
 #'
 # @param invert_section
 # @param ignore_error
 
+get_moodle_section_indices = function(
+  lines,
+  header = "Question",
+  delim = "^={3,}\\s{0,}$")
+{
 
-get_moodle_question_section_line_indices = function(
+  if (FALSE)
+  {
+    require(rmd.utils)
+    rm(list = ls())
+
+    header = "Question\\s{0,}$"
+    delim = "^={3,}\\s{0,}$"
+
+    f_name = find_file("Q01", extension = ".Rmd")
+    lines = readLines(f_name)
+    rm(f_name)
+  }
+
+  name_match = grep(header, lines)
+  delim_matches = grep(delim, lines)
+
+  stopifnot(length(name_match) > 0)
+  stopifnot(length(delim_matches) > 0)
+
+  sec_indices = which(grepl(header, lines))[1]
+  delim_indices = which(grepl(delim, lines))
+
+  # sec_start = sec_indices[which(sec_indices %in% (delim_indices - 1))]
+
+  start_index = sec_indices[which(sec_indices %in% (delim_indices - 1))]
+  end_index = setdiff(delim_indices, start_index + 1)[1]
+
+  if(length(end_index) == 0)
+  {
+    end_index = length(f_lines)
+  }
+
+  return(c(start_index, end_index))
+}
+
+
+
+
+get_moodle_question_section = function(
+  f_name, f_lines = NULL,
+  header = "Question\\s{0,}$",
+  delim = "^={3,}\\s{0,}$",
+  rm_css_chunk_name = TRUE)
+{
+  if (FALSE)
+  {
+    rm(list = ls())
+    require(rmd.utils)
+
+    header = "Question\\s{0,}$"
+    delim = "^={3,}\\s{0,}$"
+    rm_css_chunk_name = TRUE
+
+    f_name = find_file("Q01", extension = ".Rmd")
+    f_lines = readLines(f_name)
+    rm(f_name)
+
+    get_moodle_section_indices(lines = f_lines, header = header, delim = delim)
+
+  }
+
+  if (is.null(f_lines)) f_lines = readLines(filename)
+
+  sec_indices = get_moodle_section_indices(f_lines)
+  sec_body = f_lines[sec_indices[1]:sec_indices[2]]
+
+  return(sec_body)
+}
+
+
+
+get_moodle_question_section_line_indices_ = function(
   rmd_source_lines,
   section_name = "Meta-information",
   section_delimiter = "=====")
@@ -166,42 +242,57 @@ get_moodle_question_body = function(
 #'
 #' @export
 
-get_moodle_question_section = function(
+
+
+#'
+#'
+#' @export
+
+get_moodle_question_section_ = function(
   filename,
   file_lines = NULL,
-  section_header = "Question",
-  delimiter = "========",
+  header = "Question",
+  delim = "^={3,}\\s{0,}$",
   rm_css_chunk_name = TRUE)
 {
   if (FALSE)
   {
-    section_header = "Question"
-    delimiter = "======"
+    rm(list = ls())
+    require(rmd.utils)
 
-    file_lines = readLines("/Users/michaelnelso/git/intro_quant_ecol/2021_spring/assignments/setup_course_software/moodle_questions/setup_course_software_Q1.Rmd")
+    header = "Question"
+    delim = "^={3,}\\s{0,}$"
+    rm_css_chunk_name = TRUE
 
-    filename = question_source_files$question_source_files[1]
+    filename = find_file("Q01", extension = ".Rmd")
+    file_lines = readLines(filename)
   }
 
   if (is.null(file_lines)) file_lines = readLines(filename)
 
   # Find adjacent lines matching the `exams` package question and solution section delimiters
-  delimiter_lines = which(grepl(delimiter, file_lines))
-  section_lines = which(grepl(section_header, file_lines))[1]
+  delim_lines = which(grepl(delimiter, file_lines))
+  sec_lines = which(grepl(sec_header, file_lines))[1]
 
-  section_start_line = section_lines[section_lines %in% (delimiter_lines - 1)]
+  sec_lines %in% (delim_lines - 1)
 
-  delimiter_end_index = which(delimiter_lines==(section_start_line + 1)) + 1
+  sec_start = sec_lines[sec_lines %in% (delimiter_lines - 1)]
+
+  delimiter_lines==(sec_start_line + 1)
+
+  delimiter_end_index = which(delimiter_lines==(sec_start_line + 1)) + 1
 
   if(length(delimiter_lines) < delimiter_end_index){
-  section_end_line = length(file_lines)
-  } else section_end_line = delimiter_lines[delimiter_end_index] - 2
+    sec_end_line = length(file_lines)
+  } else sec_end_line = delimiter_lines[delimiter_end_index] - 2
 
-  section_body = file_lines[section_start_line:section_end_line]
+  sec_body = file_lines[sec_start_line:sec_end_line]
 
-  return(section_body)
+  return(sec_body)
   # return(file_lines[(q_line + 2) : (s_line - 1)])
 }
+
+
 
 
 #' Format a moodle question source file
@@ -295,6 +386,17 @@ add_moodle_quiz_questions = function(
 
   if (FALSE)
   {
+    rm(list = ls())
+    ass_path = find_file(
+      "week_02_reading_2021.Rmd",
+      exact_match = TRUE,
+      search_path = "/git")
+
+    q_path = file.path(dirname(ass_path), "moodle_questions")
+    question_source_files = list.files(q_path, full.names = TRUE)
+
+
+
     tmp_dir = here::here()
     include_solution = FALSE
     include_metadata = FALSE
@@ -337,6 +439,9 @@ combine_moodle_quiz_question_source = function(
 
   if (FALSE)
   {
+    require(rmd.utils)
+    rm(list = ls())
+
     tmp_dir = here::here()
     include_solution = FALSE
     include_metadata = FALSE
@@ -346,13 +451,35 @@ combine_moodle_quiz_question_source = function(
     tmp_prefix = NULL
     question_number_fmt = "## Question %1$0.2d: %2$s"
     cloze_replacement = "________"
-    require(rmd.utils)
 
-    q_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd")
+    q_files = find_file(
+      "Q", search_path = find_file("lab_05", directory = TRUE),
+      return_all = TRUE, extension = ".Rmd")
+
+    ass_path = find_file(
+      "week_02_reading_2021.Rmd",
+      exact_match = TRUE,
+      search_path = "/git")
+
+    q_path = file.path(dirname(ass_path), "moodle_questions")
+    question_source_files = list.files(q_path, full.names = TRUE)
 
 
+    ass_path = find_file(
+      "week_02_reading_2021.Rmd",
+      exact_match = TRUE,
+      search_path = "/git")
 
-    add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
+    q_path = file.path(dirname(ass_path), "moodle_questions")
+
+    q_files = list.files(q_path, full.names = TRUE)
+
+
+    add_moodle_quiz_questions(q_files)
+
+    add_moodle_quiz_questions(
+      find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd")
+    )
 
 
   }
