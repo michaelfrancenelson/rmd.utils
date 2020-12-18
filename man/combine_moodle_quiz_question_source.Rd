@@ -9,7 +9,8 @@ combine_moodle_quiz_question_source(
   include_solution = FALSE,
   include_metadata = FALSE,
   question_number_fmt = "## Question \%1$0.2d: \%2$s",
-  solution_section_fmt = "### Solution"
+  solution_section_fmt = "### Solution",
+  cloze_replacement = "________"
 )
 }
 \description{

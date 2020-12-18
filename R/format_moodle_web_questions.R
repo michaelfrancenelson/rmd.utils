@@ -59,8 +59,11 @@ get_moodle_question_section_line_indices = function(
 
   if (FALSE)
   {
+    q_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd")
     rmd_source_lines = readLines(find_file("Q01", extension = ".Rmd"))
-    rmd_source_lines = file_lines
+
+    # rmd_source_lines = readLines(find_file("Q12", extension = ".Rmd"))
+    # rmd_source_lines = file_lines
     section_name = "Meta-information"
     section_name = "Question"
     section_delimiter = "====="
@@ -107,21 +110,29 @@ get_moodle_question_body = function(
   file_lines = NULL,
   start_header = "Question",
   delimiter = "========",
-  rm_css_chunk_name = TRUE)
+  rm_css_chunk_name = TRUE,
+  cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#",
+  cloze_replacement = "________")
 {
   if (FALSE)
   {
-    start_header = "Question"
-    delimiter = "========"
-    end_header = "Solution"
+    # end_header = "Solution"
+    # end_header = "Meta-Information"
 
-    start_header = "Solution"
-    end_header = "Meta-Information"
+    rm(list = ls())
+    start_header = "Question"
+
+    delimiter = "========"
+    rm_css_chunk_name = TRUE
+    cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#"
+    cloze_replacement = "________"
 
     file_lines = NULL
 
-    question_source_files
-    filename = question_source_files$question_source_files[1]
+    file_lines = readLines(find_file(
+      "Q12", extension = ".Rmd"))
+
+    # filename = question_source_files$question_source_files[1]
   }
 
   if (is.null(file_lines)) file_lines = readLines(filename)
@@ -135,6 +146,10 @@ get_moodle_question_body = function(
   q_body = file_lines[-c(1:(q_line + 2))]
 
   if(rm_css_chunk_name) q_body = gsub("r CSS", "r", q_body)
+
+  grep(pattern = cloze_regex, q_body)
+
+  q_body = gsub(pattern = cloze_regex, replacement = cloze_replacement, x = q_body)
 
   if (length(q_line) != 1)
     cat(sprintf(
@@ -176,9 +191,15 @@ format_moodle_question_source = function(
     include_metadata = TRUE
   }
 
-  question_line_indices = get_moodle_question_section_line_indices(lines_i, section_name = "Question")
-  metadata_line_indices = get_moodle_question_section_line_indices(lines_i, section_name = "Meta-information")
-  solution_line_indices = get_moodle_question_section_line_indices(lines_i, section_name = "Solution")
+  question_line_indices =
+    get_moodle_question_section_line_indices(
+      lines_i, section_name = "Question")
+  metadata_line_indices =
+    get_moodle_question_section_line_indices(
+      lines_i, section_name = "Meta-information")
+  solution_line_indices =
+    get_moodle_question_section_line_indices(
+      lines_i, section_name = "Solution")
 
   question = ""
   solution = ""
@@ -205,7 +226,10 @@ format_moodle_question_source = function(
     question = lines_i[question_line_indices]
   }
 
-  lines_out = c(lines_i[-c(metadata_line_indices, solution_line_indices)], solution, metadata)
+  lines_out = c(
+    lines_i[-c(
+      metadata_line_indices, solution_line_indices)],
+    solution, metadata)
   return(lines_out)
 }
 
@@ -263,7 +287,8 @@ combine_moodle_quiz_question_source = function(
   include_solution = FALSE,
   include_metadata = FALSE,
   question_number_fmt = "## Question %1$0.2d: %2$s",
-  solution_section_fmt = "### Solution")
+  solution_section_fmt = "### Solution",
+  cloze_replacement = "________")
 {
 
   if (FALSE)
@@ -276,7 +301,16 @@ combine_moodle_quiz_question_source = function(
     solution_section_fmt = "### Solution"
     tmp_prefix = NULL
     question_number_fmt = "## Question %1$0.2d: %2$s"
+    cloze_replacement = "________"
+    require(rmd.utils)
+
+    q_files = find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd")
+
+
+
     add_moodle_quiz_questions(find_file("Q", search_path = find_file("lab_05", directory = TRUE), return_all = TRUE, extension = ".Rmd"))
+
+
   }
 
   # Weed out any non .Rmd files

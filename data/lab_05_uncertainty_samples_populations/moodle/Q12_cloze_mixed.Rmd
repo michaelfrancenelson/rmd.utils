@@ -1,0 +1,109 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r eval=FALSE, echo=FALSE}
+require(rmd.utils)
+exams::exams2moodle(file = find_file("cloze_mixed.Rmd"), dir = here::here("example_moodle_questions"))
+```
+
+```{r data generation, echo = FALSE, results = "hide"}
+## DATA
+require(exams)
+
+tol = 2
+
+
+## QUESTION/SOLUTION
+questions = solutions = explanations = rep(list(""), 6)
+type = rep(list("schoice"), 6)
+
+
+# Unimodal
+questions[[1]] = c("unimodal", "bimodal", "flat", "periodic")
+solutions[[1]] = c(TRUE, rep(FALSE, length(questions[[1]]) - 1)) 
+
+
+# skew
+questions[[2]] = c("right-skewed", "symmetric", "left-skewed", "leptokurtotic")
+solutions[[2]] = c(TRUE, rep(FALSE, length(questions[[2]]) - 1)) 
+
+
+
+
+# outliers
+questions[[3]] = c("are", "are not")
+solutions[[3]] = c(TRUE, rep(FALSE, length(questions[[3]]) - 1)) 
+
+
+
+# upper quartile
+questions[[4]] = ""
+solutions[[4]] = explanations[[4]] = 75
+type[[4]] = "num"
+
+
+    
+
+# lower quartile
+questions[[5]] = ""
+solutions[[5]] = explanations[[5]] = 50
+type[[5]] = "num"
+
+
+
+# mean R function
+questions[[6]] = ""
+solutions[[6]] = explanations[[6]] = "mean()"
+type[[6]] = "string"
+
+
+explanations[1:3] = lapply(solutions[1:3], function(x) ifelse(x, "True", "False"))
+
+solutions[1:3] = lapply(solutions[1:3], function(x) exams::mchoice2string(x))
+
+# if(any(explanations[4:6] < 0)) explanations[4:6] = lapply(
+#   solutions[4:6], function(x) paste("$", x, "$", sep = ""))
+
+```
+
+
+Question
+========
+
+A Normal distribution is \#\#ANSWER1\#\#.
+
+When the mean is greater than the median, a distribution is \#\#ANSWER2\#\#.
+
+In a well-behaved data set there \#\#ANSWER3\#\# outliers.
+
+The upper quartile of the numbers 1 - 100 is \#\#ANSWER4\#\#.
+
+The median of the numbers 1 - 100 is \#\#ANSWER5\#\#.
+
+The R function to calculate the arithmetic mean is \#\#ANSWER6\#\#.
+
+
+```{r questionlist, echo = FALSE, results = "asis"}
+exams::answerlist(unlist(questions), markup = "markdown")
+```
+
+
+Solution
+========
+
+```{r solutionlist, echo = FALSE, results = "asis"}
+exams::answerlist(paste(unlist(explanations), ".", sep = ""), markup = "markdown")
+```
+
+
+Meta-information
+================
+extype: cloze
+exsolution: `r paste(solutions, collapse = "|")`
+exclozetype: `r paste(type, collapse = "|")`
+exname: Boxplot and histogram
+extol: 0|0|0|`r tol`|`r tol`|0
+exshuffle: true
+
