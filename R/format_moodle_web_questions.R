@@ -41,7 +41,8 @@ format_moodle_web_questions = function(
 #'
 #' @param lines A character vector with the lines of the .Rmd source file.
 #' @param header Name of section, e.g. "Question", "Solution", "Meta-information"
-#' @param delim The section break delimiter to search for
+#' @param delim The section break delimiter to search for.  By default
+#' searches for three or more consecutive equals symbols.
 #'
 #' @export
 #'
@@ -50,10 +51,9 @@ format_moodle_web_questions = function(
 
 get_moodle_section_indices = function(
   lines,
-  header = "Question",
+  header = "Question\\s{0,}$",
   delim = "^={3,}\\s{0,}$")
 {
-
   if (FALSE)
   {
     require(rmd.utils)
@@ -61,8 +61,9 @@ get_moodle_section_indices = function(
 
     header = "Question\\s{0,}$"
     delim = "^={3,}\\s{0,}$"
+    header = "Meta-information\\s{0,}$"
 
-    f_name = find_file("Q01", extension = ".Rmd")
+    f_name = find_file("Q12", extension = ".Rmd")
     lines = readLines(f_name)
     rm(f_name)
   }
@@ -76,9 +77,20 @@ get_moodle_section_indices = function(
   sec_indices = which(grepl(header, lines))[1]
   delim_indices = which(grepl(delim, lines))
 
-  # sec_start = sec_indices[which(sec_indices %in% (delim_indices - 1))]
-
   start_index = sec_indices[which(sec_indices %in% (delim_indices - 1))]
+  end_indices = subset(delim_indices, delim_indices > start_index) - 1
+  end_index = setdiff(end_indices, start_index)
+
+  delim_indices
+  end_indices
+  start_index
+  end_index
+
+  setdiff(delim_indices_2, start_index)
+  setdiff(delim_indices, start_index + 0)
+  setdiff(delim_indices, start_index + 1)
+    setdiff(delim_indices, start_index + 1)[1]
+  setdiff(end_indices, start_index)
   end_index = setdiff(delim_indices, start_index + 1)[1]
 
   if(length(end_index) == 0)
@@ -92,10 +104,16 @@ get_moodle_section_indices = function(
 
 
 
+#'
+#'
+#' @export
+
 get_moodle_question_section = function(
   f_name, f_lines = NULL,
   header = "Question\\s{0,}$",
   delim = "^={3,}\\s{0,}$",
+  cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#",
+  cloze_replacement = "________",
   rm_css_chunk_name = TRUE)
 {
   if (FALSE)
@@ -105,14 +123,16 @@ get_moodle_question_section = function(
 
     header = "Question\\s{0,}$"
     delim = "^={3,}\\s{0,}$"
+    cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#"
+    cloze_replacement = "________"
     rm_css_chunk_name = TRUE
 
-    f_name = find_file("Q01", extension = ".Rmd")
+    f_name = find_file("Q12", extension = ".Rmd")
     f_lines = readLines(f_name)
     rm(f_name)
 
-    get_moodle_section_indices(lines = f_lines, header = header, delim = delim)
-
+    get_moodle_section_indices(
+      lines = f_lines, header = header, delim = delim)
   }
 
   if (is.null(f_lines)) f_lines = readLines(filename)
@@ -120,8 +140,83 @@ get_moodle_question_section = function(
   sec_indices = get_moodle_section_indices(f_lines)
   sec_body = f_lines[sec_indices[1]:sec_indices[2]]
 
+  if (!is.null(cloze_reges))
+  {
+    sec_body = gsub(
+      pattern = cloze_regex,
+      replacement = cloze_replacement,
+      x = sec_body)
+  }
   return(sec_body)
 }
+
+
+
+#'
+#'
+#' @export
+
+get_moodle_question_body = function(
+  f_name,
+  f_lines = NULL,
+  start_header = "Question\\s{0,}$",
+  end_header = "Meta-information\\s{0,}$",
+  delim = "^={3,}\\s{0,}$",
+  rm_css_chunk_name = TRUE,
+  cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#",
+  cloze_replacement = "________")
+{
+  if (FALSE)
+  {
+    rm(list = ls())
+
+    {
+      start_header = "Question\\s{0,}$"
+      end_header = "Meta-information\\s{0,}$"
+      delim = "^={3,}\\s{0,}$"
+      rm_css_chunk_name = TRUE
+      cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#"
+      cloze_replacement = "________"
+    }
+
+    f_lines = NULL
+    f_lines = readLines(find_file(
+      "Q12", extension = ".Rmd"))
+
+
+    get_moodle_section_indices(
+      f_lines, header = start_header, delim = delim)
+
+    get_moodle_section_indices(
+      f_lines, header = end_header, delim = delim)
+
+    # filename = question_source_files$question_source_files[1]
+  }
+
+  if (is.null(file_lines)) file_lines = readLines(filename)
+
+  # Find adjacent lines matching the `exams` package question and solution section delimiters
+  delimiter_lines = which(grepl(delimiter, file_lines))
+  question_lines = which(grepl(start_header, file_lines))
+
+  q_line = question_lines[question_lines %in% (delimiter_lines - 1)]
+
+  q_body = file_lines[-c(1:(q_line + 2))]
+
+  if(rm_css_chunk_name) q_body = gsub("r CSS", "r", q_body)
+
+  grep(pattern = cloze_regex, q_body)
+
+  q_body = gsub(pattern = cloze_regex, replacement = cloze_replacement, x = q_body)
+
+  if (length(q_line) != 1)
+    cat(sprintf(
+      "Could not locate the Moodle Question delimiter in file: %s",
+      filename))
+  return(q_body)
+  # return(file_lines[(q_line + 2) : (s_line - 1)])
+}
+
 
 
 
@@ -235,18 +330,6 @@ get_moodle_question_body = function(
   # return(file_lines[(q_line + 2) : (s_line - 1)])
 }
 
-
-
-
-#'
-#'
-#' @export
-
-
-
-#'
-#'
-#' @export
 
 get_moodle_question_section_ = function(
   filename,
