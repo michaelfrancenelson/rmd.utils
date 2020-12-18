@@ -52,7 +52,8 @@ format_moodle_web_questions = function(
 get_moodle_section_indices = function(
   lines,
   header = "Question\\s{0,}$",
-  delim = "^={3,}\\s{0,}$")
+  delim = "^={3,}\\s{0,}$",
+  end_header = NULL)
 {
   if (FALSE)
   {
@@ -60,45 +61,50 @@ get_moodle_section_indices = function(
     rm(list = ls())
 
     header = "Question\\s{0,}$"
-    delim = "^={3,}\\s{0,}$"
+    header = "Solution\\s{0,}$"
     header = "Meta-information\\s{0,}$"
+
+    end_header = "Meta-information\\s{0,}$"
+    end_header = "Solution\\s{0,}$"
+    end_header = NULL
+
+    delim = "^={3,}\\s{0,}$"
 
     f_name = find_file("Q12", extension = ".Rmd")
     lines = readLines(f_name)
     rm(f_name)
+
+    get_moodle_section_indices(lines, header, delim, end_header = end_header)
   }
 
-  name_match = grep(header, lines)
-  delim_matches = grep(delim, lines)
+  get_next_index = function(start_indices, delim_indices, lines)
+  {
+    stopifnot(length(start_indices) > 0)
+    stopifnot(length(delim_indices) > 0)
 
-  stopifnot(length(name_match) > 0)
-  stopifnot(length(delim_matches) > 0)
+    start_index = start_indices[1]
 
-  sec_indices = which(grepl(header, lines))[1]
+    end_indices = subset(
+      delim_indices,
+      (delim_indices - 1) > start_index) - 2
+
+    if(length(end_indices) == 0)
+      return(c(start_index, length(lines)))
+    return(c(start_index, end_indices[1]))
+  }
+
+  start_indices = which(grepl(header, lines))
   delim_indices = which(grepl(delim, lines))
 
-  start_index = sec_indices[which(sec_indices %in% (delim_indices - 1))]
-  end_indices = subset(delim_indices, delim_indices > start_index) - 1
-  end_index = setdiff(end_indices, start_index)
+  index_range = get_next_index(start_indices, delim_indices, lines)
 
-  delim_indices
-  end_indices
-  start_index
-  end_index
-
-  setdiff(delim_indices_2, start_index)
-  setdiff(delim_indices, start_index + 0)
-  setdiff(delim_indices, start_index + 1)
-    setdiff(delim_indices, start_index + 1)[1]
-  setdiff(end_indices, start_index)
-  end_index = setdiff(delim_indices, start_index + 1)[1]
-
-  if(length(end_index) == 0)
+  if (!is.null(end_header))
   {
-    end_index = length(f_lines)
+    index_range[2] = get_next_index(
+      which(grepl(end_header, lines)),
+      delim_indices, lines)[2] - 1
   }
-
-  return(c(start_index, end_index))
+  return(index_range)
 }
 
 
@@ -114,7 +120,8 @@ get_moodle_question_section = function(
   delim = "^={3,}\\s{0,}$",
   cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#",
   cloze_replacement = "________",
-  rm_css_chunk_name = TRUE)
+  rm_css_chunk_name = TRUE,
+  end_header = NULL)
 {
   if (FALSE)
   {
@@ -122,6 +129,11 @@ get_moodle_question_section = function(
     require(rmd.utils)
 
     header = "Question\\s{0,}$"
+    header = "Meta-information\\s{0,}$"
+
+    end_header = "Meta-information\\s{0,}$"
+    end_header = NULL
+
     delim = "^={3,}\\s{0,}$"
     cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#"
     cloze_replacement = "________"
@@ -132,15 +144,22 @@ get_moodle_question_section = function(
     rm(f_name)
 
     get_moodle_section_indices(
-      lines = f_lines, header = header, delim = delim)
+      lines = f_lines, header = header,
+      delim = delim, end_header = end_header)
+
+    get_moodle_question_section(f_lines = f_lines, end_header = end_header)
   }
 
   if (is.null(f_lines)) f_lines = readLines(filename)
 
-  sec_indices = get_moodle_section_indices(f_lines)
+  sec_indices = get_moodle_section_indices(
+    f_lines,
+    header = header,
+    end_header = end_header,
+    delim = delim)
   sec_body = f_lines[sec_indices[1]:sec_indices[2]]
 
-  if (!is.null(cloze_reges))
+  if (!is.null(cloze_regex))
   {
     sec_body = gsub(
       pattern = cloze_regex,
