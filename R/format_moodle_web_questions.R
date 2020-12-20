@@ -67,9 +67,6 @@ format_moodle_web_questions = function(
 
     f_names = list.files(q_path, full.names = TRUE)
 
-
-
-
   }
 
   get_sec = function(headr, lines)
@@ -96,8 +93,9 @@ format_moodle_web_questions = function(
 
   prep_sections = q_sections = soln_sections = mdat_sections = rep(list(""), length(f_names))
 
-
-  prep-sections = lapply(source_lines, function(x) get_post_header(x))
+  f_names
+  get_post_header(f_names[[2]])
+  prep_sections = lapply(f_names, function(x) get_post_header(x))
 
   if (include_question)
   {

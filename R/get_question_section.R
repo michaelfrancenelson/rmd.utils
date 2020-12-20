@@ -130,7 +130,7 @@ get_post_header = function(
   yaml_lines = grep(pattern = yaml_header_delim, x = f_lines)
   h_line = grep(pattern = header, x = f_lines)[1] - 1
 
-  return(f_lines[tail(yaml_lines, 1):h_line])
+  return(f_lines[(tail(yaml_lines, 1) + 1):h_line])
 }
 
 
@@ -138,6 +138,7 @@ get_post_header = function(
 if (FALSE)
 {
   require(rmd.utils)
+  devtools::load_all()
   # rm(list = ls())
 
   header = "Question\\s{0,}$"
@@ -175,13 +176,16 @@ if (FALSE)
 
   f_names = list.files(q_path, full.names = TRUE)
   f_names
-  format_moodle_web_questions(f_names = f_names)
+  format_moodle_web_questions(f_names = f_names)[1:10]
 
   if (FALSE)
   {
+    devtools::load_all()
     devtools::check()
-  devtools::document()
-  devtools::install()
-    }
+    devtools::document()
+    devtools::install()
+    devtools::install_github("michaelfrancenelson/rmd.utils", force = TRUE)
+
+  }
 }
 
