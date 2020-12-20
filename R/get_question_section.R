@@ -177,6 +177,11 @@ if (FALSE)
   f_names
   format_moodle_web_questions(f_names = f_names)
 
-
+  if (FALSE)
+  {
+    devtools::check()
+  devtools::document()
+  devtools::install()
+    }
 }
 

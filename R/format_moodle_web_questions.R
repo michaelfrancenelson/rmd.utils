@@ -33,7 +33,7 @@ format_moodle_web_questions = function(
   if (FALSE)
   {
     require(rmd.utils)
-    rm(list = ls())
+    # rm(list = ls())
 
     delim = "^={3,}\\s{0,}$"
     cloze_regex = "\\\\#\\\\#ANSWER[0-9]*\\\\#\\\\#"
@@ -67,6 +67,9 @@ format_moodle_web_questions = function(
 
     f_names = list.files(q_path, full.names = TRUE)
 
+
+
+
   }
 
   get_sec = function(headr, lines)
@@ -93,8 +96,8 @@ format_moodle_web_questions = function(
 
   prep_sections = q_sections = soln_sections = mdat_sections = rep(list(""), length(f_names))
 
-  source_lines[[2]]
-  get_post_header(f_lines = source_lines[[2]])
+
+  prep-sections = lapply(source_lines, function(x) get_post_header(x))
 
   if (include_question)
   {
