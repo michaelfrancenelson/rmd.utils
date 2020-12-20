@@ -25,7 +25,8 @@ format_moodle_web_questions = function(
   include_solution  = FALSE,
   include_metadata  = FALSE,
   soln_header       = "Solution\\s{0,}$",
-  meta_header       = "Meta-information\\s{0,}$")
+  meta_header       = "Meta-information\\s{0,}$",
+  q_ext = ".Rmd")
 {
 
   # Test Case
@@ -43,6 +44,8 @@ format_moodle_web_questions = function(
     soln_header = "Solution\\s{0,}$"
     meta_header = "Meta-information\\s{0,}$"
 
+    q_ext = ".Rmd"
+
     include_question = TRUE
     include_solution = TRUE
     include_solution = FALSE
@@ -51,7 +54,18 @@ format_moodle_web_questions = function(
     f_name = find_file("Q12", extension = ".Rmd")
     f_names = list.files(dirname(f_name), full.names = TRUE)
     # rm(f_name)
+    q_path = file.path(
+      dirname(find_file("week_03_reading_2021.Rmd", exact_match = TRUE, search_path = "/git")),
+      "moodle_questions")
 
+
+    f_names = find_file(
+      "",
+      search_path = q_path,
+      extension = q_ext,
+      return_all = TRUE)
+
+    f_names = list.files(q_path, full.names = TRUE)
 
   }
 
@@ -70,14 +84,17 @@ format_moodle_web_questions = function(
     )
   }
 
+
+  f_names = f_names[grep(q_ext, x = f_names)]
+
   # Read the content of all of the question files
   # options(warn = -1)
   source_lines = lapply(f_names, readLines)
 
-  prep_sections = q_sections = soln_sections = mdat_sections =
-    rep(list(""), length(f_names))
+  prep_sections = q_sections = soln_sections = mdat_sections = rep(list(""), length(f_names))
 
-  prep_sections = lapply(source_lines, function(x) get_post_header(f_lines = x, f_name = NULL))
+  source_lines[[2]]
+  get_post_header(f_lines = source_lines[[2]])
 
   if (include_question)
   {

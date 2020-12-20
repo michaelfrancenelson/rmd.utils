@@ -169,5 +169,14 @@ if (FALSE)
 
   format_moodle_web_questions(f_names = f_names)
 
+  q_path = file.path(
+    dirname(find_file("week_03_reading_2021.Rmd", exact_match = TRUE, search_path = "/git")),
+    "moodle_questions")
+
+  f_names = list.files(q_path, full.names = TRUE)
+  f_names
+  format_moodle_web_questions(f_names = f_names)
+
+
 }
 

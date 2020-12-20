@@ -15,7 +15,8 @@ format_moodle_web_questions(
   include_solution = FALSE,
   include_metadata = FALSE,
   soln_header = "Solution\\\\s{0,}$",
-  meta_header = "Meta-information\\\\s{0,}$"
+  meta_header = "Meta-information\\\\s{0,}$",
+  q_ext = ".Rmd"
 )
 }
 \arguments{
