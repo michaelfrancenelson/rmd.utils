@@ -5,17 +5,28 @@
 \title{Format moodle question source file}
 \usage{
 format_moodle_web_questions(
-  question_source_files,
+  f_names,
+  q_header = "Question\\\\s{0,}$",
+  delim = "^={3,}\\\\s{0,}$",
+  cloze_regex = "\\\\\\\\#\\\\\\\\#ANSWER[0-9]*\\\\\\\\#\\\\\\\\#",
+  cloze_replacement = "________",
+  rm_css_chunk_name = TRUE,
+  include_question = TRUE,
   include_solution = FALSE,
-  include_metadata = FALSE
+  include_metadata = FALSE,
+  soln_header = "Solution\\\\s{0,}$",
+  meta_header = "Meta-information\\\\s{0,}$"
 )
 }
 \arguments{
-\item{question_source_files}{a character vector of filenames of source files to be parsed and formatted}
+\item{delim}{The section break delimiter to search for.  By default
+searches for three or more consecutive equals symbols.}
 
 \item{include_solution}{boolean: whether nor not to include the 'Solution' section of the source files}
 
 \item{include_metadata}{boolean: whether or not to include the 'Meta-information' section of the source files.}
+
+\item{q_files}{a character vector of filenames of source files to be parsed and formatted}
 }
 \value{
 source code lines
