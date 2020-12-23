@@ -27,7 +27,10 @@ get_question_markup = function(
   a_list_lines = grep(
     pattern = a_list_fmt, x = q_text)
 
-  q_text = q_text[-a_list_lines]
+  if (length(a_list_lines) > 0)
+    q_text = q_text[-a_list_lines]
 
   return(trimws(q_text))
 }
+
+
