@@ -6,6 +6,11 @@
 \usage{
 get_rmd_chunks(filename = NULL, file_lines = NULL)
 }
+\arguments{
+\item{filename}{the name of the Rmd file to read}
+
+\item{file_lines}{a character vector containing the lines of a source Rmd file.}
+}
 \description{
 Get all the chunk names and the start/end line numbers for the corresponding source code.
 }

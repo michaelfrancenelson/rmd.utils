@@ -21,7 +21,9 @@ make_html_dropdown(
 
 \item{fmt_option}{the format for the html option elemment}
 
-\item{schoice_q}{the prompt text to display for multiple-choice}
+\item{schoice_q}{the prompt text to display for single-choice}
+
+\item{mchoice_q}{the prompt text to display for multiple-choice}
 
 \item{mchoice}{whether or not to display the multiple-choice question description}
 

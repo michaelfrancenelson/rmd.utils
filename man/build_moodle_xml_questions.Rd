@@ -13,6 +13,19 @@ build_moodle_xml_questions(
   xml_output_filename = NULL
 )
 }
+\arguments{
+\item{question_source_files}{blah}
+
+\item{assignment_name}{blah}
+
+\item{xml_output_path}{blah}
+
+\item{exam_mchoice}{list(shuffle = TRUE)}
+
+\item{exam_schoice}{list(shuffle = TRUE)}
+
+\item{xml_output_filename}{= NULL}
+}
 \description{
 Wrapper for exams2moodle
 }

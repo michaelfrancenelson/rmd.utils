@@ -1,4 +1,10 @@
+#' Get markup for a question?
 #'
+#' @param q_files blah
+#' @param q_fmt blah
+#' @param q_header blah
+#' @param delim blah
+#' @param a_list_fmt blah
 #'
 #' @export
 
@@ -12,7 +18,7 @@ get_question_markup = function(
   q_text = unlist(
     lapply(
       q_files,
-      function(x) rmd.utils::get_question_section(
+      function(x) get_question_section(
         f_lines = readLines(x))))
 
   grep(pattern = delim, x = q_text)

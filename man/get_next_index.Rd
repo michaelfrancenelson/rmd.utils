@@ -7,6 +7,10 @@
 get_next_index(start_indices, delim_indices, f_lines)
 }
 \arguments{
+\item{start_indices}{blah}
+
+\item{delim_indices}{blah}
+
 \item{f_lines}{A character vector with the lines of the .Rmd source file.}
 }
 \description{

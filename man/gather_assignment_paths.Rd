@@ -8,9 +8,9 @@ gather_assignment_paths(
   week_n,
   assignment_prefix,
   out_dir,
-  moodle_xml_out_dir = here::here("docs", "moodle_quiz_questions"),
+  moodle_xml_out_dir = here("docs", "moodle_quiz_questions"),
   out_fmt = "\%s_\%0.2d",
-  key_out_dir = here::here("docs", "answer_keys"),
+  key_out_dir = here("docs", "answer_keys"),
   key_suffix = "answer_key",
   source_dir_fmt = "\%s_\%0.2d_",
   source_file_fmt = "\%s_\%0.2d",
@@ -22,6 +22,41 @@ gather_assignment_paths(
   doc_source_ext = ".Rmd",
   question_source_ext = ".Rmd"
 )
+}
+\arguments{
+\item{week_n}{blah}
+
+\item{assignment_prefix}{blah}
+
+\item{out_dir}{blah}
+
+\item{moodle_xml_out_dir}{blah}
+
+\item{out_fmt}{blah}
+
+\item{key_out_dir}{blah}
+
+\item{key_suffix}{blah}
+
+\item{source_dir_fmt}{blah}
+
+\item{source_file_fmt}{blah}
+
+\item{source_search_path}{bl;ah}
+
+\item{moodle_question_source_subdir}{blah}
+
+\item{moodle_question_prefix}{blah}
+
+\item{key_file_fmt}{blah}
+
+\item{moodle_xml_out_fmt}{blah}
+
+\item{doc_source_ext}{bklah}
+
+\item{question_source_ext}{blah}
+
+\item{answer_key}{blah}
 }
 \description{
 Create an answer key for a moodle quiz-question based assignment.

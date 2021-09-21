@@ -6,7 +6,7 @@
 #' @param fmt_option the format for the html option elemment
 #' @param mchoice whether or not to display the multiple-choice question description
 #' @param schoice_q the prompt text to display for single-choice
-#' @param schoice_q the prompt text to display for multiple-choice
+#' @param mchoice_q the prompt text to display for multiple-choice
 #' @param cat whether to cat() the results
 #'
 #' @export
@@ -51,6 +51,7 @@ make_html_dropdown = function(
 #' @param cat whether or not to cat() the output
 #'
 #' @export
+
 sub_cloze_answer = function(
   ans_num,
   check_var,

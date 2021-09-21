@@ -1,5 +1,25 @@
 #' Create an answer key for a moodle quiz-question based assignment.
 #'
+#' @import here
+#'
+#' @param week_n blah
+#' @param assignment_prefix blah
+#' @param out_dir blah
+#' @param answer_key blah
+#' @param moodle_xml_out_dir blah
+#' @param out_fmt blah
+#' @param key_out_dir blah
+#' @param key_suffix blah
+#' @param source_dir_fmt blah
+#' @param source_file_fmt blah
+#' @param source_search_path bl;ah
+#' @param moodle_question_source_subdir blah
+#' @param moodle_question_prefix blah
+#' @param key_file_fmt blah
+#' @param moodle_xml_out_fmt blah
+#' @param doc_source_ext bklah
+#' @param question_source_ext blah
+#'
 #' @export
 #'
 
@@ -9,9 +29,9 @@ gather_assignment_paths = function(
   out_dir,
   # answer_key = TRUE,
   # moodle_xml = TRUE,
-  moodle_xml_out_dir = here::here("docs", "moodle_quiz_questions"),
+  moodle_xml_out_dir = here("docs", "moodle_quiz_questions"),
   out_fmt = "%s_%0.2d",
-  key_out_dir = here::here("docs", "answer_keys"),
+  key_out_dir = here("docs", "answer_keys"),
   key_suffix = "answer_key",
   source_dir_fmt = "%s_%0.2d_",
   source_file_fmt = "%s_%0.2d",
@@ -25,53 +45,6 @@ gather_assignment_paths = function(
 )
 {
 
-  if (FALSE)
-  {
-
-    require(rmd.utils)
-    # devtools::install_github("michaelfrancenelson/rmd.utils")
-    week_n = 7
-    assignment_prefix = "lab"
-
-    out_dir = here::here("docs", "assignments", "eco_634")
-
-    out_fmt = "%s_%0.2d"
-
-    source_dir_fmt = "%s_%0.2d_"
-    source_file_fmt = "%s_%0.2d"
-    source_search_path = NULL
-
-
-    out_dir = here::here("docs", "assignments", "eco_602", "reading_questions")
-    out_fmt = "%s_week_%0.2d"
-    source_dir_fmt = "%s_week_%0.2d_"
-    source_file_fmt = "%s_week_%0.2d"
-    source_search_path = NULL
-
-    week_n = 12
-    assignment_prefix = "reading_questions"
-
-
-
-
-    key_file_fmt = "%s_%0.2d_answer_key"
-    key_out_dir = here::here("docs", "answer_keys")
-
-    moodle_question_source_subdir = "moodle"
-    moodle_question_prefix = "Q_"
-    moodle_xml_out_dir = here::here("docs", "moodle_quiz_questions")
-    moodle_xml_out_fmt = "%s_%0.2d_moodle_questions"
-
-    key_suffix = "answer_key"
-
-    doc_source_ext = ".Rmd"
-    question_source_ext = ".Rmd"
-
-    # mdl_question_fmt
-    # sss = sprintf("Q_%0.2s_%s_%0.2d", "%0.2d", assignment_prefix, week_n)
-
-
-  }
 
   source_path =
     find_file(

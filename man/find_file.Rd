@@ -35,6 +35,8 @@ find_file(
 \item{error_if_none}{Throw an error if no matches are found?  If FALSE, the function returns a NULL value.}
 
 \item{recursive}{Search recursively?}
+
+\item{exact_match}{Should does the filename have to match exactly?}
 }
 \value{
 The absolute path to the file, if it was found.

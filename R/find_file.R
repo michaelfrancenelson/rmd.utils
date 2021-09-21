@@ -1,7 +1,7 @@
 #' Find a file
 #'
 #' Locate a file somewhere within the directory structure of an RProject.
-#'
+#' @import here
 #'
 #' @param filename Name of the file to search for
 #' @param search_path Optional path within which to search
@@ -12,6 +12,7 @@
 #' @param extension Search for files with this extension only?
 #' @param error_if_none Throw an error if no matches are found?  If FALSE, the function returns a NULL value.
 #' @param recursive Search recursively?
+#' @param exact_match Should does the filename have to match exactly?
 #'
 #' @return The absolute path to the file, if it was found.
 #' @export
@@ -29,23 +30,8 @@ find_file = function(
   exact_match = FALSE)
 {
 
-  if (FALSE)
-  {
-    filename = "lab_05"
-    filename = "_05"
-    search_path = NULL
-    return_all = FALSE
-    duplicated_files_error = FALSE
-    verbose = FALSE
-    directory = FALSE
-    extension = NULL
-    error_if_none = TRUE
-    recursive = TRUE
-    exact_match = FALSE
-  }
 
-
-  if (is.null(search_path))  search_path = here::here()
+  if (is.null(search_path))  search_path = here()
 
   if (directory)
   {

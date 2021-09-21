@@ -1,9 +1,15 @@
 #' Get all the chunk names and the start/end line numbers for the corresponding source code.
 #'
+#'
+#' @param filename the name of the Rmd file to read
+#' @param file_lines a character vector containing the lines of a source Rmd file.
+#'
 #' @export
+#'
 
 
-get_rmd_chunks = function(filename = NULL, file_lines = NULL)
+get_rmd_chunks = function(
+  filename = NULL, file_lines = NULL)
 {
   if (is.null(file_lines)) file_lines = readLines(filename)
 
@@ -17,9 +23,7 @@ get_rmd_chunks = function(filename = NULL, file_lines = NULL)
 
 
 #' Get the yaml header from an Rmd file
-#'
-#' @param filename the name of the Rmd file to read
-#' @param file_lines a character vector containing the lines of a source Rmd file.
+#' @inheritParams get_rmd_chunks
 #'
 #' @export
 
@@ -73,8 +77,11 @@ get_rmd_chunk_indices = function(filename, file_lines = NULL)
 
 
 
+#' description
 #'
+#' @inheritParams get_rmd_chunks
 #'
+#' @param chunk_names blah
 #'
 #' @export
 
@@ -95,62 +102,7 @@ source_rmd_chunks = function(filename, file_lines = NULL, chunk_names = NULL)
   e <- environment() # current environment
   e = .GlobalEnv
   p <- parent.env(e)
-  lapply(chunks, function(x) evaluate::evaluate(
+  lapply(chunks, function(x) evaluate(
     # textConnection(x), stop_on_error = 0, envir = globalenv()))
     textConnection(x), stop_on_error = 0, envir = e))
 }
-
-
-
-if (FALSE)
-{
-  require(rmd.utils)
-  rm(list = ls())
-  devtools::document()
-  devtools::load_all()
-  devtools::install()
-  fn = find_file("lab_05.Rmd", exact_match = TRUE)
-
-  source_rmd_chunks(fn)
-  source_rmd_chunks(fn, chunk_names = "setup")
-
-  file_lines = readLines(fn)
-  chunk_indices = get_rmd_chunk_indices(file_lines = file_lines)
-
-  chunks = get_rmd_chunks(filename = fn)
-
-  chunks
-
-  evaluate::evaluate(textConnection(chunks$setup))
-
-
-  lapply(chunks, evaluate::evaluate)
-  i = 1
-
-
-  chunk_text_1 = file_lines[chunk_indices[i, 1]-1]
-
-  chunk_text_1
-
-  regmatches(chunk_text_1, regexpr("r .+?[\\s,}]", chunk_text_1))
-
-
-  f = function()
-  {
-    evaluate::evalute("x <<- 2")
-  }
-
-
-  match_1 = regmatches(chunk_text_1, regexpr("r .+,", chunk_text_1))
-  match_1 = regmatches(chunk_text_1, regexpr("r .+\\s", chunk_text_1))
-  regmatches(match_1, regexpr("r .+[,]", match_1))
-
-  regmatches(chunk_text_1, regexpr("r .+/[,\\s]", chunk_text_1))
-  regmatches(chunk_text_1, regexpr("r .+[\\s,}]", chunk_text_1))
-  regmatches(chunk_text_1, regexpr("r .+ ", chunk_text_1))
-
-  chunk_text_i = file_lines[chunk_indices[i, 1]:chunk_indices[i, 2]]
-  evaluate::evaluate(textConnection(chunk_text_i), stop_on_error = 0)
-}
-
-#'

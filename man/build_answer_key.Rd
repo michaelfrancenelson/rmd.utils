@@ -14,6 +14,21 @@ build_answer_key(
   solution_section_fmt = "### Solution"
 )
 }
+\arguments{
+\item{doc_source_file}{a}
+
+\item{question_source_files}{aaa}
+
+\item{key_target_file}{blah}
+
+\item{include_solution}{blah}
+
+\item{include_metadata_key}{blah}
+
+\item{question_number_fmt}{blah}
+
+\item{solution_section_fmt}{blah}
+}
 \description{
 Create an answer key for a moodle quiz-question based assignment.
 }

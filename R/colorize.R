@@ -3,6 +3,13 @@
 #' Stolen from: https://bookdown.org/yihui/rmarkdown-cookbook/font-color.html
 #'
 #' @export
+#'
+#' @import knitr
+#'
+#' @param x text to colorize
+#' @param color color to use
+#' @param italic = FALSE
+#' @param bold = FALSE
 
 colorize <- function(x, color, italic = FALSE, bold = FALSE)
 {
@@ -14,7 +21,7 @@ colorize <- function(x, color, italic = FALSE, bold = FALSE)
     bold = TRUE
   }
 
-  if (knitr::is_latex_output())
+  if (is_latex_output())
   {
     out = sprintf("\\textcolor{%s}{%s}", color, x)
     if (italic) out = sprintf("\\textit{%s}", out)
@@ -22,7 +29,7 @@ colorize <- function(x, color, italic = FALSE, bold = FALSE)
 
     sprintf(out)
 
-  } else if (knitr::is_html_output())
+  } else if (is_html_output())
   {
     out = sprintf("<span style='color: %s;", color)
     if (italic) out = sprintf("%s font-style: italic;", out)

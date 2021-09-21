@@ -25,8 +25,14 @@ get_question_section(
 \item{delim}{The section break delimiter to search for.  By default
 searches for three or more consecutive equals symbols.}
 
-\item{end_header}{Name of section, e.g. "Question", "Solution", "Meta-information".  If Null, the default, the function looks for the ending delimiter for the section specified by 'header'.}
+\item{cloze_regex}{blah}
+
+\item{cloze_replacement}{blah}
+
+\item{rm_css_chunk_name}{blah TRUE}
+
+\item{end_header}{blah NULL}
 }
 \description{
-Retrieve lines from a source .Rmd file, formatted as a Moodle quiz question from package 'exams'
+f_name = NULL, f_lines = NULL,
 }

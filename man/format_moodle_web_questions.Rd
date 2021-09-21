@@ -20,14 +20,29 @@ format_moodle_web_questions(
 )
 }
 \arguments{
-\item{delim}{The section break delimiter to search for.  By default
-searches for three or more consecutive equals symbols.}
+\item{f_names}{a}
 
-\item{include_solution}{boolean: whether nor not to include the 'Solution' section of the source files}
+\item{q_header}{a}
 
-\item{include_metadata}{boolean: whether or not to include the 'Meta-information' section of the source files.}
+\item{delim}{a}
 
-\item{q_files}{a character vector of filenames of source files to be parsed and formatted}
+\item{cloze_regex}{blah}
+
+\item{cloze_replacement}{= "________",}
+
+\item{rm_css_chunk_name}{= TRUE,}
+
+\item{include_question}{= TRUE,}
+
+\item{include_solution}{= FALSE,}
+
+\item{include_metadata}{= FALSE,}
+
+\item{soln_header}{blah}
+
+\item{meta_header}{blah}
+
+\item{q_ext}{blah}
 }
 \value{
 source code lines
